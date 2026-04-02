@@ -23,6 +23,10 @@
   --tone-text: #4f4538;
   --tone-text-soft: #7a6d5d;
 
+  --surface-card-strong: rgba(255, 255, 255, 0.88);
+  --surface-card-mid: rgba(255, 252, 246, 0.72);
+  --surface-card-soft: rgba(244, 233, 216, 0.82);
+
   --shadow-soft: 0 14px 34px rgba(102, 82, 56, 0.12);
   --shadow-card: 0 20px 48px rgba(130, 109, 77, 0.14);
   --radius-xl: 28px;
@@ -38,3 +42,4 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+

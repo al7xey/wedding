@@ -112,13 +112,12 @@ body {
   padding: clamp(1.2rem, 3vw, 2.3rem);
   border-radius: var(--radius-lg);
   background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.88), rgba(253, 248, 240, 0.82)),
-    var(--tone-paper);
+    radial-gradient(circle at 22% 18%, var(--surface-card-mid), transparent 46%),
+    linear-gradient(160deg, var(--surface-card-strong), var(--surface-card-soft));
   border: 1px solid rgba(200, 176, 143, 0.38);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(8px);
 }
-
 .ornamental-background {
   position: fixed;
   inset: 0;
@@ -315,11 +314,10 @@ body {
   border-radius: var(--radius-lg);
   border: 1px solid rgba(202, 173, 136, 0.38);
   background:
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.78), transparent 44%),
-    linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(247, 238, 224, 0.9));
+    radial-gradient(circle at 22% 18%, var(--surface-card-mid), transparent 46%),
+    linear-gradient(165deg, var(--surface-card-strong), var(--surface-card-soft));
   box-shadow: 0 18px 34px rgba(123, 96, 66, 0.14);
 }
-
 .countdown-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -330,10 +328,11 @@ body {
   text-align: center;
   padding: 0.8rem 0.5rem;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.64);
+  background:
+    radial-gradient(circle at 18% 16%, color-mix(in oklab, var(--surface-card-mid) 90%, transparent 10%), transparent 56%),
+    linear-gradient(165deg, color-mix(in oklab, var(--surface-card-strong) 95%, transparent 5%), color-mix(in oklab, var(--surface-card-soft) 95%, transparent 5%));
   border: 1px solid rgba(196, 167, 129, 0.3);
 }
-
 .countdown-item__value {
   display: block;
   font-family: var(--font-serif);
@@ -374,7 +373,9 @@ body {
 .story-card {
   padding: clamp(1.1rem, 2.4vw, 1.7rem);
   border-radius: var(--radius-md);
-  background: linear-gradient(170deg, rgba(255, 255, 255, 0.88), rgba(252, 245, 234, 0.84));
+  background:
+    radial-gradient(circle at 20% 16%, var(--surface-card-mid), transparent 44%),
+    linear-gradient(170deg, var(--surface-card-strong), var(--surface-card-soft));
   border: 1px solid rgba(201, 176, 144, 0.36);
   box-shadow: 0 12px 28px rgba(120, 95, 66, 0.14);
   transition: transform 0.28s ease, box-shadow 0.28s ease;
@@ -435,7 +436,9 @@ body {
   gap: clamp(1rem, 2vw, 1.4rem);
   padding: 0.95rem 1rem;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.66);
+  background:
+    radial-gradient(circle at 14% 16%, var(--surface-card-mid), transparent 48%),
+    linear-gradient(165deg, var(--surface-card-strong), var(--surface-card-soft));
   border: 1px solid rgba(199, 172, 137, 0.25);
   box-shadow: 0 10px 24px rgba(123, 96, 66, 0.11);
 }
@@ -524,10 +527,11 @@ body {
   gap: 0.58rem;
   border-radius: 999px;
   padding: 0.42rem 0.56rem;
-  background: rgba(255, 255, 255, 0.74);
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklab, var(--surface-card-mid) 88%, transparent 12%), transparent 60%),
+    linear-gradient(165deg, color-mix(in oklab, var(--surface-card-strong) 95%, transparent 5%), color-mix(in oklab, var(--surface-card-soft) 95%, transparent 5%));
   border: 1px solid rgba(204, 176, 139, 0.35);
 }
-
 .palette-chip__swatch {
   display: inline-block;
   width: 1.38rem;
@@ -577,12 +581,11 @@ body {
   padding: clamp(1.5rem, 4vw, 2.8rem);
   border-radius: calc(var(--radius-xl) + 6px);
   background:
-    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.8), transparent 45%),
-    linear-gradient(165deg, rgba(255, 254, 250, 0.92), rgba(248, 239, 225, 0.9));
+    radial-gradient(circle at 20% 0%, var(--surface-card-mid), transparent 45%),
+    linear-gradient(165deg, var(--surface-card-strong), var(--surface-card-soft));
   border: 1px solid rgba(199, 171, 135, 0.4);
   box-shadow: 0 24px 44px rgba(123, 96, 66, 0.16);
 }
-
 .final-section__eyebrow {
   margin: 0;
   text-transform: uppercase;
@@ -1040,6 +1043,8 @@ body {
     transition: none !important;
   }
 }
+
+
 
 
 
