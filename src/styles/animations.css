@@ -1,0 +1,133 @@
+﻿@keyframes loadingShimmer {
+  0% {
+    background-position: 100% 0, 0 0;
+  }
+  100% {
+    background-position: -100% 0, 0 0;
+  }
+}
+
+@keyframes grainShift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-14%, -10%, 0);
+  }
+}
+
+@keyframes floatingBreath {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes gentleGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(181, 139, 90, 0);
+  }
+  50% {
+    box-shadow: 0 0 36px rgba(181, 139, 90, 0.26);
+  }
+}
+
+@keyframes sparklePulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  35% {
+    opacity: 0.72;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes sealShardOne {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-24px, -20px) rotate(-24deg) scale(0.52);
+    opacity: 0;
+  }
+}
+
+@keyframes sealShardTwo {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.56;
+  }
+  100% {
+    transform: translate(20px, -24px) rotate(28deg) scale(0.54);
+    opacity: 0;
+  }
+}
+
+@keyframes sealShardThree {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.52;
+  }
+  100% {
+    transform: translate(26px, 18px) rotate(18deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes sealShardFour {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-20px, 20px) rotate(-16deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.intro-overlay__grain {
+  animation: grainShift 14s linear infinite;
+}
+
+.envelope__sparkle.is-visible {
+  animation: sparklePulse 1.35s ease-in-out infinite;
+}
+
+.wax-seal.is-cracked .wax-seal__fragment--1 {
+  animation: sealShardOne 0.78s ease-out forwards;
+}
+
+.wax-seal.is-cracked .wax-seal__fragment--2 {
+  animation: sealShardTwo 0.78s ease-out forwards;
+}
+
+.wax-seal.is-cracked .wax-seal__fragment--3 {
+  animation: sealShardThree 0.78s ease-out forwards;
+}
+
+.wax-seal.is-cracked .wax-seal__fragment--4 {
+  animation: sealShardFour 0.78s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay__grain,
+  .envelope__sparkle.is-visible,
+  .wax-seal.is-cracked .wax-seal__fragment--1,
+  .wax-seal.is-cracked .wax-seal__fragment--2,
+  .wax-seal.is-cracked .wax-seal__fragment--3,
+  .wax-seal.is-cracked .wax-seal__fragment--4 {
+    animation: none !important;
+  }
+}
+
+
