@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 type IntroPhase =
@@ -50,8 +50,8 @@ const PHASE_DELAY_MS = {
   finale: 360,
 } as const
 
-const BASE_EASE = [0.22, 1, 0.36, 1] as const
-const EMPHASIS_EASE = [0.16, 1, 0.3, 1] as const
+const BASE_EASE = [0.25, 0.1, 0.25, 1] as const
+const EMPHASIS_EASE = [0.42, 0, 0.58, 1] as const
 
 const wait = async (milliseconds: number): Promise<void> => {
   await new Promise<void>((resolve) => {
@@ -65,26 +65,26 @@ const hasReached = (phase: IntroPhase, target: IntroPhase): boolean => {
 
 const envelopeVariants = {
   idle: { scale: 1, y: 0, opacity: 1 },
-  sealBreaking: { scale: 1.004, y: -1, opacity: 1 },
-  flapOpening: { scale: 1.012, y: -6, opacity: 1 },
-  letterRise: { scale: 1.02, y: -12, opacity: 1 },
-  finale: { scale: 0.994, y: -20, opacity: 0 },
+  sealBreaking: { scale: 1.003, y: -1, opacity: 1 },
+  flapOpening: { scale: 1.01, y: -4, opacity: 1 },
+  letterRise: { scale: 1.015, y: -9, opacity: 1 },
+  finale: { scale: 0.996, y: -16, opacity: 0 },
 }
 
 const flapVariants = {
   idle: { rotateX: 0, opacity: 1 },
   sealBreaking: { rotateX: 0, opacity: 1 },
-  flapOpening: { rotateX: -156, opacity: 0.98 },
-  letterRise: { rotateX: -164, opacity: 0.92 },
-  finale: { rotateX: -164, opacity: 0.2 },
+  flapOpening: { rotateX: -148, opacity: 0.98 },
+  letterRise: { rotateX: -158, opacity: 0.94 },
+  finale: { rotateX: -158, opacity: 0.24 },
 }
 
 const letterVariants = {
   idle: { y: 62, scale: 0.97, opacity: 0 },
-  sealBreaking: { y: 58, scale: 0.97, opacity: 0 },
-  flapOpening: { y: 20, scale: 1, opacity: 1 },
-  letterRise: { y: -90, scale: 1.05, opacity: 1 },
-  finale: { y: -220, scale: 1.12, opacity: 0 },
+  sealBreaking: { y: 60, scale: 0.97, opacity: 0 },
+  flapOpening: { y: 30, scale: 0.995, opacity: 1 },
+  letterRise: { y: -74, scale: 1.035, opacity: 1 },
+  finale: { y: -170, scale: 1.08, opacity: 0 },
 }
 
 const sealVariants = {
@@ -117,7 +117,7 @@ const WaxSealBase = ({ monogram, isCracked }: WaxSealProps) => {
     <motion.div
       className={`wax-seal ${isCracked ? 'is-cracked' : ''}`}
       variants={sealVariants}
-      transition={{ duration: 0.46, ease: EMPHASIS_EASE }}
+      transition={{ duration: 0.62, ease: EMPHASIS_EASE }}
     >
       <span className="wax-seal__monogram">{monogram}</span>
       <span className="wax-seal__fragment wax-seal__fragment--1" />
@@ -145,7 +145,7 @@ const EnvelopeSceneBase = ({
       initial={false}
       animate={phase}
       variants={envelopeVariants}
-      transition={{ duration: 0.62, ease: BASE_EASE }}
+      transition={{ duration: 0.86, ease: BASE_EASE }}
     >
       <div className="envelope__body">
         <div className="envelope__back" />
@@ -153,7 +153,7 @@ const EnvelopeSceneBase = ({
         <motion.div
           className="envelope__letter"
           variants={letterVariants}
-          transition={{ duration: 0.74, ease: EMPHASIS_EASE }}
+          transition={{ duration: 0.98, ease: EMPHASIS_EASE }}
         >
           <EnvelopeLetter names={names} date={date} />
         </motion.div>
@@ -165,7 +165,7 @@ const EnvelopeSceneBase = ({
         <motion.div
           className="envelope__flap"
           variants={flapVariants}
-          transition={{ duration: 0.7, ease: EMPHASIS_EASE }}
+          transition={{ duration: 0.92, ease: EMPHASIS_EASE }}
         />
 
         <div className="wax-seal-anchor">
@@ -199,6 +199,8 @@ const IntroOverlayBase = ({
   const runningRef = useRef(false)
 
   useEffect(() => {
+    mountedRef.current = true
+
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
@@ -305,4 +307,3 @@ const IntroOverlayBase = ({
 export const IntroOverlay = memo(IntroOverlayBase)
 
 IntroOverlay.displayName = 'IntroOverlay'
-

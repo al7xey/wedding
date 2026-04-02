@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Manrope:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Manrope:wght@400;500;600&display=swap');
 
 :root {
   --font-body: 'Manrope', 'Segoe UI', sans-serif;
@@ -23,9 +23,9 @@
   --tone-text: #4f4538;
   --tone-text-soft: #7a6d5d;
 
-  --surface-card-strong: rgba(255, 255, 255, 0.88);
-  --surface-card-mid: rgba(255, 252, 246, 0.72);
-  --surface-card-soft: rgba(244, 233, 216, 0.82);
+  --surface-card-strong: rgba(255, 255, 255, 0.84);
+  --surface-card-mid: rgba(255, 252, 246, 0.68);
+  --surface-card-soft: rgba(244, 233, 216, 0.76);
 
   --shadow-soft: 0 14px 34px rgba(102, 82, 56, 0.12);
   --shadow-card: 0 20px 48px rgba(130, 109, 77, 0.14);

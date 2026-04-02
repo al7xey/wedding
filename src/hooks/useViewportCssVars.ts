@@ -1,10 +1,10 @@
-﻿import { useEffect } from 'react'
+import { useEffect } from 'react'
 import { debounce, throttle } from '@/utils/performance'
 
 const SCROLL_THROTTLE_MS = 80
 const RESIZE_DEBOUNCE_MS = 140
 
-export const useViewportCssVars = (): void => {
+export const useViewportCssVars = (enabled = true): void => {
   useEffect(() => {
     const root = document.documentElement
 
@@ -23,6 +23,15 @@ export const useViewportCssVars = (): void => {
       root.style.setProperty('--scroll-progress', progress.toFixed(4))
     }
 
+    updateViewportVars()
+
+    if (!enabled) {
+      root.style.setProperty('--scroll-progress', '0')
+      return
+    }
+
+    updateScrollProgress()
+
     const onScroll = throttle(() => {
       updateScrollProgress()
     }, SCROLL_THROTTLE_MS)
@@ -31,9 +40,6 @@ export const useViewportCssVars = (): void => {
       updateViewportVars()
       updateScrollProgress()
     }, RESIZE_DEBOUNCE_MS)
-
-    updateViewportVars()
-    updateScrollProgress()
 
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
@@ -45,5 +51,5 @@ export const useViewportCssVars = (): void => {
       onScroll.cancel()
       onResize.cancel()
     }
-  }, [])
+  }, [enabled])
 }

@@ -1,29 +1,100 @@
 ﻿import { motion } from 'framer-motion'
 import { memo, useId } from 'react'
+import type { CSSProperties } from 'react'
 import { useParallax } from '@/hooks/useParallax'
 
+type ClusterSide = 'left' | 'right'
+
 interface OrnamentClusterProps {
-  className: string
+  side: ClusterSide
+  top: string
+  horizontalOffset: string
   distance: number
+  opacity: number
+  driftDuration: number
+  driftDelay: number
   reducedMotion: boolean
 }
 
+interface ClusterConfig {
+  key: string
+  side: ClusterSide
+  top: string
+  horizontalOffset: string
+  distance: number
+  opacity: number
+  driftDuration: number
+  driftDelay: number
+}
+
+const CLUSTER_TOPS = [
+  2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 72, 77, 82, 87, 92,
+  97,
+] as const
+
+const ORNAMENT_CLUSTERS: ClusterConfig[] = CLUSTER_TOPS.flatMap((top, index) => {
+  const distance = 8 + (index % 6)
+  const opacity = 0.44 + (index % 4) * 0.07
+  const offset = `-${2.2 + (index % 3) * 0.35}rem`
+  const driftDuration = 9 + (index % 5) * 1.3
+  const driftDelay = (index % 7) * -0.8
+
+  return [
+    {
+      key: `left-${index}`,
+      side: 'left',
+      top: `${top}%`,
+      horizontalOffset: offset,
+      distance,
+      opacity,
+      driftDuration,
+      driftDelay,
+    },
+    {
+      key: `right-${index}`,
+      side: 'right',
+      top: `${top}%`,
+      horizontalOffset: offset,
+      distance,
+      opacity,
+      driftDuration,
+      driftDelay,
+    },
+  ]
+})
+
 const OrnamentClusterBase = ({
-  className,
+  side,
+  top,
+  horizontalOffset,
   distance,
+  opacity,
+  driftDuration,
+  driftDelay,
   reducedMotion,
 }: OrnamentClusterProps) => {
-  const { ref, y } = useParallax<HTMLDivElement>(distance)
+  const { y } = useParallax(distance)
   const clusterId = useId().replace(/:/g, '')
 
   const petalGradientId = `petalGradient-${clusterId}`
   const leafGradientId = `leafGradient-${clusterId}`
 
+  const positionalStyle: CSSProperties & Record<string, string | number> = {
+    top,
+    opacity,
+    '--ornament-drift-duration': `${driftDuration}s`,
+    '--ornament-drift-delay': `${driftDelay}s`,
+    '--ornament-drift-y': `${1.8 + (distance % 4) * 0.45}px`,
+    '--ornament-drift-rotate': `${side === 'left' ? 1 : -1}deg`,
+    ...(side === 'left'
+      ? { left: horizontalOffset }
+      : { right: horizontalOffset }),
+  }
+
   return (
     <motion.div
-      ref={ref}
-      className={`ornament-cluster ${className}`}
-      style={reducedMotion ? undefined : { y }}
+      className={`ornament-cluster ornament-cluster--side-${side}`}
+      style={reducedMotion ? positionalStyle : { ...positionalStyle, y }}
     >
       <div className="ornament-cluster__shape">
         <svg
@@ -75,18 +146,6 @@ interface OrnamentalBackgroundProps {
   reducedMotion: boolean
 }
 
-const ORNAMENT_CLUSTERS = [
-  { className: 'ornament-cluster--top-left', distance: 18 },
-  { className: 'ornament-cluster--top-mid-left', distance: 14 },
-  { className: 'ornament-cluster--top-mid-right', distance: 16 },
-  { className: 'ornament-cluster--top-right', distance: 24 },
-  { className: 'ornament-cluster--middle-left', distance: 12 },
-  { className: 'ornament-cluster--middle-right', distance: 13 },
-  { className: 'ornament-cluster--bottom-left', distance: 15 },
-  { className: 'ornament-cluster--bottom-mid', distance: 12 },
-  { className: 'ornament-cluster--bottom-right', distance: 20 },
-] as const
-
 const OrnamentalBackgroundBase = ({
   reducedMotion,
 }: OrnamentalBackgroundProps) => {
@@ -94,9 +153,14 @@ const OrnamentalBackgroundBase = ({
     <div className="ornamental-background" aria-hidden="true">
       {ORNAMENT_CLUSTERS.map((cluster) => (
         <OrnamentCluster
-          key={cluster.className}
-          className={cluster.className}
+          key={cluster.key}
+          side={cluster.side}
+          top={cluster.top}
+          horizontalOffset={cluster.horizontalOffset}
           distance={cluster.distance}
+          opacity={cluster.opacity}
+          driftDuration={cluster.driftDuration}
+          driftDelay={cluster.driftDelay}
           reducedMotion={reducedMotion}
         />
       ))}

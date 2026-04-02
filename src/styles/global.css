@@ -1,4 +1,4 @@
-﻿* {
+* {
   box-sizing: border-box;
 }
 
@@ -13,10 +13,13 @@ body {
   font-family: var(--font-body);
   color: var(--tone-text);
   background:
-    radial-gradient(circle at 14% 12%, rgba(255, 245, 227, 0.68), transparent 36%),
-    radial-gradient(circle at 84% 8%, rgba(246, 232, 220, 0.66), transparent 44%),
-    radial-gradient(circle at 20% 88%, rgba(244, 233, 220, 0.52), transparent 36%),
-    var(--tone-page);
+    radial-gradient(circle at 14% 10%, rgba(255, 245, 227, 0.72), transparent 34%),
+    radial-gradient(circle at 84% 8%, rgba(246, 232, 220, 0.68), transparent 42%),
+    radial-gradient(circle at 50% 42%, rgba(249, 239, 222, 0.56), transparent 50%),
+    radial-gradient(circle at 18% 78%, rgba(244, 233, 220, 0.58), transparent 42%),
+    radial-gradient(circle at 84% 88%, rgba(241, 228, 211, 0.54), transparent 44%),
+    linear-gradient(180deg, #f7efe0 0%, #f3e8d6 46%, #f6ecdc 100%);
+  background-attachment: fixed;
   overflow-x: clip;
 }
 
@@ -52,6 +55,22 @@ body {
   padding-top: clamp(1.2rem, 2.6vw, 2.2rem);
 }
 
+.hero-screen,
+.inv-section,
+.sections-fallback {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-screen__frame,
+.countdown-card,
+.soft-card,
+.story-card,
+.timeline-item,
+.final-section__card {
+  position: relative;
+  z-index: 2;
+}
 .invitation-main.is-locked {
   pointer-events: none;
   user-select: none;
@@ -122,95 +141,48 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+  overflow: hidden;
+  z-index: 1;
   transform: translate3d(0, calc(var(--scroll-progress) * -14px), 0);
   will-change: transform;
 }
 
 .ornament-cluster {
   position: absolute;
-  width: clamp(170px, 22vw, 340px);
-  opacity: 0.86;
-  filter: drop-shadow(0 18px 22px rgba(166, 132, 96, 0.22)) saturate(1.08);
+  width: clamp(150px, 19vw, 280px);
+  filter: drop-shadow(0 18px 24px rgba(166, 132, 96, 0.22)) saturate(1.16);
 }
 
 .ornament-cluster__shape {
   width: 100%;
+  transform-origin: 50% 50%;
+  animation:
+    ornamentDrift var(--ornament-drift-duration, 11s) ease-in-out
+    var(--ornament-drift-delay, 0s) infinite;
+  will-change: transform;
 }
 
-.ornament-cluster--top-left {
-  top: -1.8rem;
-  left: -1.2rem;
-}
-
-.ornament-cluster--top-mid-left {
-  top: -2.5rem;
-  left: 23%;
-  width: clamp(130px, 16vw, 230px);
-  opacity: 0.74;
-}
-
-.ornament-cluster--top-mid-right {
-  top: -2.4rem;
-  right: 22%;
-  width: clamp(130px, 16vw, 230px);
-  opacity: 0.74;
-}
-
-.ornament-cluster--top-right {
-  top: -1.8rem;
-  right: -1.3rem;
-}
-
-.ornament-cluster--middle-left {
-  top: 34%;
-  left: -2.1rem;
-  width: clamp(120px, 15vw, 220px);
-  opacity: 0.58;
-}
-
-.ornament-cluster--middle-right {
-  top: 34%;
-  right: -2rem;
-  width: clamp(120px, 15vw, 220px);
-  opacity: 0.58;
-}
-
-.ornament-cluster--bottom-left {
-  bottom: -1.9rem;
-  left: -1.1rem;
-}
-
-.ornament-cluster--bottom-mid {
-  bottom: -2.6rem;
-  left: 38%;
-  width: clamp(130px, 16vw, 230px);
-  opacity: 0.72;
-}
-
-.ornament-cluster--bottom-right {
-  bottom: -1.9rem;
-  right: -1.2rem;
-}
-
-.ornament-cluster--top-right .ornament-cluster__shape,
-.ornament-cluster--top-mid-right .ornament-cluster__shape,
-.ornament-cluster--middle-right .ornament-cluster__shape {
+.ornament-cluster--side-right .ornament-cluster__svg {
   transform: scaleX(-1);
-}
-
-.ornament-cluster--bottom-left .ornament-cluster__shape,
-.ornament-cluster--bottom-mid .ornament-cluster__shape {
-  transform: scaleY(-1);
-}
-
-.ornament-cluster--bottom-right .ornament-cluster__shape {
-  transform: scale(-1);
 }
 
 .ornament-cluster__svg {
   width: 100%;
   height: auto;
+}
+
+@keyframes ornamentDrift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform:
+      translate3d(0, var(--ornament-drift-y, 2.2px), 0)
+      rotate(var(--ornament-drift-rotate, 1deg))
+      scale(1.025);
+  }
 }
 
 .hero-screen {
@@ -853,7 +825,7 @@ body {
   top: 46%;
   bottom: -0.1%;
   z-index: 5;
-  clip-path: polygon(0 0, 50% 18%, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   border: 1px solid rgba(188, 158, 117, 0.52);
   border-radius: 0 0 14px 14px;
   background:
@@ -881,6 +853,7 @@ body {
   width: 50.4%;
   z-index: 6;
   pointer-events: none;
+  display: none;
 }
 
 .envelope__fold--left {
@@ -928,7 +901,7 @@ body {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   border-radius: 14px 14px 0 0;
-  clip-path: polygon(0.7% 0, 99.3% 0, 100% 15%, 50% 84%, 0 15%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   background:
     linear-gradient(180deg, #f8ecd9, #efdcc1),
     repeating-linear-gradient(
@@ -947,10 +920,11 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  clip-path: polygon(1.2% 0.8%, 98.8% 0.8%, 97.6% 14%, 50% 82.8%, 2.4% 14%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0));
   opacity: 0.55;
 }
+
 
 .wax-seal-anchor {
   position: absolute;
@@ -1092,19 +1066,14 @@ body {
     border-radius: 22px;
   }
 
-  .ornament-cluster--middle-left,
-  .ornament-cluster--middle-right,
-  .ornament-cluster--top-mid-right,
-  .ornament-cluster--bottom-mid {
+  .ornament-cluster:nth-child(odd) {
     display: none;
   }
 
-  .ornament-cluster--top-mid-left {
-    left: 58%;
-    top: -2rem;
-    opacity: 0.68;
+  .ornament-cluster {
+    width: clamp(120px, 28vw, 190px);
+    opacity: 0.58 !important;
   }
-
   .timeline-item {
     padding: 0.85rem 0.8rem;
     min-height: 86px;
@@ -1151,6 +1120,10 @@ body {
 
   .story-card {
     transition: none !important;
+  }
+
+  .ornament-cluster__shape {
+    animation: none !important;
   }
 }
 
