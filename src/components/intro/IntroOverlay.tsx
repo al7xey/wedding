@@ -1,5 +1,5 @@
 ﻿import { motion } from 'framer-motion'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 type IntroPhase =
   | 'idle'
@@ -43,6 +43,16 @@ const PHASE_ORDER: Record<IntroPhase, number> = {
   finale: 4,
 }
 
+const PHASE_DELAY_MS = {
+  sealBreaking: 280,
+  flapOpening: 620,
+  letterRise: 760,
+  finale: 360,
+} as const
+
+const BASE_EASE = [0.22, 1, 0.36, 1] as const
+const EMPHASIS_EASE = [0.16, 1, 0.3, 1] as const
+
 const wait = async (milliseconds: number): Promise<void> => {
   await new Promise<void>((resolve) => {
     window.setTimeout(resolve, milliseconds)
@@ -55,38 +65,38 @@ const hasReached = (phase: IntroPhase, target: IntroPhase): boolean => {
 
 const envelopeVariants = {
   idle: { scale: 1, y: 0, opacity: 1 },
-  sealBreaking: { scale: 1.008, y: -2, opacity: 1 },
-  flapOpening: { scale: 1.015, y: -6, opacity: 1 },
-  letterRise: { scale: 1.02, y: -10, opacity: 1 },
-  finale: { scale: 0.99, y: -20, opacity: 0 },
+  sealBreaking: { scale: 1.004, y: -1, opacity: 1 },
+  flapOpening: { scale: 1.012, y: -6, opacity: 1 },
+  letterRise: { scale: 1.02, y: -12, opacity: 1 },
+  finale: { scale: 0.994, y: -20, opacity: 0 },
 }
 
 const flapVariants = {
   idle: { rotateX: 0, opacity: 1 },
   sealBreaking: { rotateX: 0, opacity: 1 },
-  flapOpening: { rotateX: -158, opacity: 0.98 },
-  letterRise: { rotateX: -166, opacity: 0.92 },
-  finale: { rotateX: -166, opacity: 0.2 },
+  flapOpening: { rotateX: -156, opacity: 0.98 },
+  letterRise: { rotateX: -164, opacity: 0.92 },
+  finale: { rotateX: -164, opacity: 0.2 },
 }
 
 const letterVariants = {
-  idle: { y: 56, scale: 0.97, opacity: 0 },
-  sealBreaking: { y: 54, scale: 0.97, opacity: 0 },
-  flapOpening: { y: 18, scale: 1, opacity: 1 },
-  letterRise: { y: -70, scale: 1.04, opacity: 1 },
-  finale: { y: -200, scale: 1.12, opacity: 0 },
+  idle: { y: 62, scale: 0.97, opacity: 0 },
+  sealBreaking: { y: 58, scale: 0.97, opacity: 0 },
+  flapOpening: { y: 20, scale: 1, opacity: 1 },
+  letterRise: { y: -90, scale: 1.05, opacity: 1 },
+  finale: { y: -220, scale: 1.12, opacity: 0 },
 }
 
 const sealVariants = {
   idle: { opacity: 1, scale: 1, rotate: 0 },
   sealBreaking: {
-    opacity: [1, 1, 0.66],
-    scale: [1, 1.09, 0.9],
-    rotate: [0, 10, -6, 0],
+    opacity: [1, 1, 0.64],
+    scale: [1, 1.07, 0.9],
+    rotate: [0, 9, -7, 0],
   },
-  flapOpening: { opacity: 0.3, scale: 0.84, rotate: 0 },
-  letterRise: { opacity: 0, scale: 0.74, rotate: 0 },
-  finale: { opacity: 0, scale: 0.74, rotate: 0 },
+  flapOpening: { opacity: 0.26, scale: 0.84, rotate: 0 },
+  letterRise: { opacity: 0, scale: 0.75, rotate: 0 },
+  finale: { opacity: 0, scale: 0.75, rotate: 0 },
 }
 
 const EnvelopeLetterBase = ({ names, date }: EnvelopeLetterProps) => {
@@ -107,7 +117,7 @@ const WaxSealBase = ({ monogram, isCracked }: WaxSealProps) => {
     <motion.div
       className={`wax-seal ${isCracked ? 'is-cracked' : ''}`}
       variants={sealVariants}
-      transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.46, ease: EMPHASIS_EASE }}
     >
       <span className="wax-seal__monogram">{monogram}</span>
       <span className="wax-seal__fragment wax-seal__fragment--1" />
@@ -135,7 +145,7 @@ const EnvelopeSceneBase = ({
       initial={false}
       animate={phase}
       variants={envelopeVariants}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.62, ease: BASE_EASE }}
     >
       <div className="envelope__body">
         <div className="envelope__back" />
@@ -143,7 +153,7 @@ const EnvelopeSceneBase = ({
         <motion.div
           className="envelope__letter"
           variants={letterVariants}
-          transition={{ duration: 0.78, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.74, ease: EMPHASIS_EASE }}
         >
           <EnvelopeLetter names={names} date={date} />
         </motion.div>
@@ -155,7 +165,7 @@ const EnvelopeSceneBase = ({
         <motion.div
           className="envelope__flap"
           variants={flapVariants}
-          transition={{ duration: 0.88, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, ease: EMPHASIS_EASE }}
         />
 
         <div className="wax-seal-anchor">
@@ -185,47 +195,79 @@ const IntroOverlayBase = ({
 }: IntroOverlayProps) => {
   const [phase, setPhase] = useState<IntroPhase>('idle')
   const [isRunning, setIsRunning] = useState(false)
+  const mountedRef = useRef(true)
+  const runningRef = useRef(false)
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
     return () => {
+      mountedRef.current = false
+      runningRef.current = false
       document.body.style.overflow = previousOverflow
     }
   }, [])
 
   const playSequence = useCallback(async () => {
-    if (isRunning) {
+    if (runningRef.current) {
       return
     }
 
+    runningRef.current = true
     setIsRunning(true)
 
     if (reducedMotion) {
       setPhase('finale')
-      await wait(180)
-      onOpened()
+      await wait(120)
+
+      if (mountedRef.current) {
+        runningRef.current = false
+        onOpened()
+      }
+
       return
     }
 
     setPhase('sealBreaking')
-    await wait(320)
+    await wait(PHASE_DELAY_MS.sealBreaking)
+
+    if (!mountedRef.current) {
+      return
+    }
 
     setPhase('flapOpening')
-    await wait(700)
+    await wait(PHASE_DELAY_MS.flapOpening)
+
+    if (!mountedRef.current) {
+      return
+    }
 
     setPhase('letterRise')
-    await wait(760)
+    await wait(PHASE_DELAY_MS.letterRise)
+
+    if (!mountedRef.current) {
+      return
+    }
 
     setPhase('finale')
-    await wait(420)
+    await wait(PHASE_DELAY_MS.finale)
 
-    onOpened()
-  }, [isRunning, onOpened, reducedMotion])
+    if (mountedRef.current) {
+      runningRef.current = false
+      onOpened()
+    }
+  }, [onOpened, reducedMotion])
 
   const flapOpened = useMemo(() => hasReached(phase, 'flapOpening'), [phase])
   const sealCracked = useMemo(() => hasReached(phase, 'sealBreaking'), [phase])
+
+  const triggerClassName = useMemo(
+    () => `envelope-trigger${isRunning ? ' is-running' : ''}`,
+    [isRunning],
+  )
+
+  const isInteractive = !reducedMotion && !isRunning && phase === 'idle'
 
   return (
     <motion.div
@@ -239,15 +281,11 @@ const IntroOverlayBase = ({
       <div className="intro-overlay__inner">
         <motion.button
           type="button"
-          className="envelope-trigger"
+          className={triggerClassName}
           onClick={playSequence}
           disabled={isRunning}
-          whileHover={
-            reducedMotion || isRunning ? undefined : { scale: 1.015, y: -2 }
-          }
-          whileTap={
-            reducedMotion || isRunning ? undefined : { scale: 0.996, y: 1 }
-          }
+          whileHover={isInteractive ? { scale: 1.012, y: -1.5 } : undefined}
+          whileTap={isInteractive ? { scale: 0.997, y: 1 } : undefined}
           aria-label="Открыть свадебное приглашение"
         >
           <EnvelopeScene
@@ -267,6 +305,4 @@ const IntroOverlayBase = ({
 export const IntroOverlay = memo(IntroOverlayBase)
 
 IntroOverlay.displayName = 'IntroOverlay'
-
-
 

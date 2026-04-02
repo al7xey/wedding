@@ -652,7 +652,8 @@ body {
   line-height: 0;
 }
 
-.envelope-trigger:disabled {
+.envelope-trigger:disabled,
+.envelope-trigger.is-running {
   cursor: default;
 }
 
@@ -663,6 +664,7 @@ body {
   perspective: 2000px;
   transform-style: preserve-3d;
   filter: drop-shadow(0 22px 28px rgba(109, 82, 54, 0.22));
+  will-change: transform, opacity;
 }
 
 .envelope__body {
@@ -672,6 +674,7 @@ body {
   transform-style: preserve-3d;
   border-radius: 14px;
   overflow: visible;
+  backface-visibility: hidden;
 }
 
 .envelope__back,
@@ -736,6 +739,7 @@ body {
   padding: 0.9rem;
   transform-origin: center bottom;
   box-shadow: 0 8px 18px rgba(142, 113, 79, 0.15);
+  will-change: transform, opacity;
 }
 
 .envelope__letter-label {
@@ -768,7 +772,7 @@ body {
   top: 46%;
   bottom: -0.1%;
   z-index: 5;
-  clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 50% 18%, 100% 0, 100% 100%, 0 100%);
   border: 1px solid rgba(188, 158, 117, 0.52);
   border-radius: 0 0 14px 14px;
   background:
@@ -800,13 +804,13 @@ body {
 
 .envelope__fold--left {
   left: -0.2%;
-  clip-path: polygon(0 0, 100% 56%, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 18%, 100% 100%, 0 100%);
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.24), rgba(224, 201, 169, 0.2));
 }
 
 .envelope__fold--right {
   right: -0.2%;
-  clip-path: polygon(0 56%, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 18%, 100% 0, 100% 100%, 0 100%);
   background: linear-gradient(200deg, rgba(255, 255, 255, 0.24), rgba(224, 201, 169, 0.2));
 }
 
@@ -816,7 +820,7 @@ body {
   position: absolute;
   top: -1%;
   width: 1px;
-  height: 74%;
+  height: 62%;
   background: rgba(177, 142, 104, 0.44);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
@@ -824,13 +828,13 @@ body {
 .envelope__fold--left::after {
   right: 0;
   transform-origin: top right;
-  transform: rotate(-39deg) translate(1px, -2px);
+  transform: rotate(-17deg) translate(0, 0);
 }
 
 .envelope__fold--right::after {
   left: 0;
   transform-origin: top left;
-  transform: rotate(39deg) translate(-1px, -2px);
+  transform: rotate(17deg) translate(0, 0);
 }
 
 .envelope__flap {
@@ -843,7 +847,7 @@ body {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   border-radius: 14px 14px 0 0;
-  clip-path: polygon(0.7% 0, 99.3% 0, 100% 15%, 50% 88%, 0 15%);
+  clip-path: polygon(0.7% 0, 99.3% 0, 100% 15%, 50% 84%, 0 15%);
   background:
     linear-gradient(180deg, #f8ecd9, #efdcc1),
     repeating-linear-gradient(
@@ -855,13 +859,14 @@ body {
     );
   border: 1px solid rgba(194, 166, 128, 0.5);
   box-shadow: 0 14px 18px rgba(116, 92, 66, 0.12);
+  will-change: transform, opacity;
 }
 
 .envelope__flap::before {
   content: '';
   position: absolute;
   inset: 0;
-  clip-path: polygon(1.2% 0.8%, 98.8% 0.8%, 97.6% 14%, 50% 86.5%, 2.4% 14%);
+  clip-path: polygon(1.2% 0.8%, 98.8% 0.8%, 97.6% 14%, 50% 82.8%, 2.4% 14%);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0));
   opacity: 0.55;
 }
@@ -869,7 +874,7 @@ body {
 .wax-seal-anchor {
   position: absolute;
   left: 50%;
-  top: 49%;
+  top: 50.4%;
   transform: translate(-50%, -50%);
   z-index: 8;
   pointer-events: none;
@@ -891,6 +896,7 @@ body {
     inset -11px -13px 22px rgba(74, 30, 14, 0.45),
     inset 8px 7px 14px rgba(231, 139, 93, 0.24),
     0 14px 18px rgba(99, 44, 25, 0.24);
+  will-change: transform, opacity;
 }
 
 .wax-seal::before {
@@ -948,6 +954,7 @@ body {
   background: radial-gradient(circle at 50% 40%, rgba(186, 100, 66, 0.45), rgba(123, 52, 31, 0.3));
   pointer-events: none;
 }
+
 .envelope__sparkle-anchor {
   position: absolute;
   left: 50%;
@@ -1043,6 +1050,11 @@ body {
     transition: none !important;
   }
 }
+
+
+
+
+
 
 
 
