@@ -1,6 +1,6 @@
 ﻿# Алексей и Анастасия — Wedding Invitation 2026
 
-Одностраничный свадебный сайт-приглашение на `React + TypeScript` (Vite), без backend и без серверной логики.
+Одностраничный свадебный сайт-приглашение на `React + TypeScript` (Vite)
 
 ## Сайт
 
@@ -19,8 +19,7 @@
 - React 19
 - TypeScript
 - Vite
-- Framer Motion
-- CSS (без backend/API)
+- CSS 
 
 ## Локальный запуск
 
