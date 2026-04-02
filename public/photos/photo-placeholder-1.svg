@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Photo placeholder 1</title>
+  <desc id="d1">Replace with your wedding photo.</desc>
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8efe2"/>
+      <stop offset="1" stop-color="#e7d6bf"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#g1)"/>
+  <circle cx="220" cy="220" r="160" fill="#f3dfd4" opacity="0.6"/>
+  <circle cx="960" cy="680" r="210" fill="#dde6d5" opacity="0.55"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9d7a50" font-family="Georgia, serif" font-size="72" letter-spacing="6">PHOTO 01</text>
+</svg>

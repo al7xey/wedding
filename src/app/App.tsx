@@ -16,6 +16,7 @@ const CountdownSection = lazy(async () => {
   const module = await import('@/components/sections/CountdownSection')
   return { default: module.CountdownSection }
 })
+
 const GreetingSection = lazy(async () => {
   const module = await import('@/components/sections/GreetingSection')
   return { default: module.GreetingSection }
@@ -24,6 +25,11 @@ const GreetingSection = lazy(async () => {
 const StorySection = lazy(async () => {
   const module = await import('@/components/sections/StorySection')
   return { default: module.StorySection }
+})
+
+const PhotoGallerySection = lazy(async () => {
+  const module = await import('@/components/sections/PhotoGallerySection')
+  return { default: module.PhotoGallerySection }
 })
 
 const TimelineSection = lazy(async () => {
@@ -131,6 +137,7 @@ const App = () => {
           <CountdownSection />
           <GreetingSection text={weddingContent.greeting} />
           <StorySection story={weddingContent.story} />
+          <PhotoGallerySection photos={weddingContent.photos} />
           <TimelineSection items={weddingContent.timeline} />
           <VenueSection venue={weddingContent.venue} />
           <DressCodeSection dressCode={weddingContent.dressCode} />
@@ -143,5 +150,3 @@ const App = () => {
 }
 
 export default App
-
-

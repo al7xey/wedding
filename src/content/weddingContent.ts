@@ -75,6 +75,50 @@ export const weddingContent: WeddingContent = {
       { name: 'Серо-зеленый', hex: '#c4cec1' },
     ],
   },
+  photos: [
+    {
+      id: 'photo-1',
+      src: '/photos/photo-placeholder-1.svg',
+      alt: 'Плейсхолдер: пара на прогулке',
+      orientation: 'landscape',
+      caption: 'Замените на ваше фото',
+    },
+    {
+      id: 'photo-2',
+      src: '/photos/photo-placeholder-2.svg',
+      alt: 'Плейсхолдер: романтический портрет',
+      orientation: 'portrait',
+      caption: 'Замените на ваше фото',
+    },
+    {
+      id: 'photo-3',
+      src: '/photos/photo-placeholder-3.svg',
+      alt: 'Плейсхолдер: детали букета',
+      orientation: 'square',
+      caption: 'Замените на ваше фото',
+    },
+    {
+      id: 'photo-4',
+      src: '/photos/photo-placeholder-4.svg',
+      alt: 'Плейсхолдер: рука в руке',
+      orientation: 'landscape',
+      caption: 'Замените на ваше фото',
+    },
+    {
+      id: 'photo-5',
+      src: '/photos/photo-placeholder-5.svg',
+      alt: 'Плейсхолдер: утренние сборы',
+      orientation: 'portrait',
+      caption: 'Замените на ваше фото',
+    },
+    {
+      id: 'photo-6',
+      src: '/photos/photo-placeholder-6.svg',
+      alt: 'Плейсхолдер: вечерний кадр',
+      orientation: 'square',
+      caption: 'Замените на ваше фото',
+    },
+  ],
   wishes: {
     title: 'Пожелания',
     items: [

@@ -42,6 +42,14 @@ export interface CoupleNames {
   monogram: string
 }
 
+export interface GalleryPhoto {
+  id: string
+  src: string
+  alt: string
+  orientation?: 'landscape' | 'portrait' | 'square'
+  caption?: string
+}
+
 export interface WeddingContent {
   coupleNames: CoupleNames
   weddingDate: string
@@ -53,6 +61,7 @@ export interface WeddingContent {
     text: string
     palette: DressCodePaletteItem[]
   }
+  photos: GalleryPhoto[]
   wishes: WishesContent
   finalBlock: FinalBlockContent
 }
