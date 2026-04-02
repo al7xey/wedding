@@ -1,7 +1,5 @@
-﻿import { motion } from 'framer-motion'
-import { memo, useId } from 'react'
+﻿import { memo, useId } from 'react'
 import type { CSSProperties } from 'react'
-import { useParallax } from '@/hooks/useParallax'
 
 type ClusterSide = 'left' | 'right'
 
@@ -73,7 +71,6 @@ const OrnamentClusterBase = ({
   driftDelay,
   reducedMotion,
 }: OrnamentClusterProps) => {
-  const { y } = useParallax(distance)
   const clusterId = useId().replace(/:/g, '')
 
   const petalGradientId = `petalGradient-${clusterId}`
@@ -86,15 +83,16 @@ const OrnamentClusterBase = ({
     '--ornament-drift-delay': `${driftDelay}s`,
     '--ornament-drift-y': `${1.8 + (distance % 4) * 0.45}px`,
     '--ornament-drift-rotate': `${side === 'left' ? 1 : -1}deg`,
+    '--ornament-parallax-distance': `${distance}px`,
     ...(side === 'left'
       ? { left: horizontalOffset }
       : { right: horizontalOffset }),
   }
 
   return (
-    <motion.div
-      className={`ornament-cluster ornament-cluster--side-${side}`}
-      style={reducedMotion ? positionalStyle : { ...positionalStyle, y }}
+    <div
+      className={`ornament-cluster ornament-cluster--side-${side}${reducedMotion ? ' is-reduced-motion' : ''}`}
+      style={positionalStyle}
     >
       <div className="ornament-cluster__shape">
         <svg
@@ -134,7 +132,7 @@ const OrnamentClusterBase = ({
           <circle cx="276" cy="124" r="14" fill={`url(#${petalGradientId})`} opacity="0.68" />
         </svg>
       </div>
-    </motion.div>
+    </div>
   )
 }
 

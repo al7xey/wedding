@@ -44,14 +44,14 @@ const PHASE_ORDER: Record<IntroPhase, number> = {
 }
 
 const PHASE_DELAY_MS = {
-  sealBreaking: 280,
-  flapOpening: 620,
-  letterRise: 760,
-  finale: 360,
+  sealBreaking: 360,
+  flapOpening: 760,
+  letterRise: 980,
+  finale: 480,
 } as const
 
-const BASE_EASE = [0.25, 0.1, 0.25, 1] as const
-const EMPHASIS_EASE = [0.42, 0, 0.58, 1] as const
+const BASE_EASE = [0.22, 0.61, 0.36, 1] as const
+const EMPHASIS_EASE = [0.33, 1, 0.68, 1] as const
 
 const wait = async (milliseconds: number): Promise<void> => {
   await new Promise<void>((resolve) => {
@@ -65,18 +65,18 @@ const hasReached = (phase: IntroPhase, target: IntroPhase): boolean => {
 
 const envelopeVariants = {
   idle: { scale: 1, y: 0, opacity: 1 },
-  sealBreaking: { scale: 1.003, y: -1, opacity: 1 },
-  flapOpening: { scale: 1.01, y: -4, opacity: 1 },
-  letterRise: { scale: 1.015, y: -9, opacity: 1 },
-  finale: { scale: 0.996, y: -16, opacity: 0 },
+  sealBreaking: { scale: 1.002, y: -1, opacity: 1 },
+  flapOpening: { scale: 1.008, y: -4, opacity: 1 },
+  letterRise: { scale: 1.012, y: -8, opacity: 1 },
+  finale: { scale: 0.997, y: -14, opacity: 0 },
 }
 
 const flapVariants = {
   idle: { rotateX: 0, opacity: 1 },
   sealBreaking: { rotateX: 0, opacity: 1 },
-  flapOpening: { rotateX: -148, opacity: 0.98 },
-  letterRise: { rotateX: -158, opacity: 0.94 },
-  finale: { rotateX: -158, opacity: 0.24 },
+  flapOpening: { rotateX: -144, opacity: 0.98 },
+  letterRise: { rotateX: -154, opacity: 0.95 },
+  finale: { rotateX: -154, opacity: 0.28 },
 }
 
 const letterVariants = {
@@ -90,9 +90,9 @@ const letterVariants = {
 const sealVariants = {
   idle: { opacity: 1, scale: 1, rotate: 0 },
   sealBreaking: {
-    opacity: [1, 1, 0.64],
-    scale: [1, 1.07, 0.9],
-    rotate: [0, 9, -7, 0],
+    opacity: [1, 0.96, 0.72],
+    scale: [1, 1.04, 0.92],
+    rotate: [0, 6, -4, 0],
   },
   flapOpening: { opacity: 0.26, scale: 0.84, rotate: 0 },
   letterRise: { opacity: 0, scale: 0.75, rotate: 0 },
@@ -102,7 +102,7 @@ const sealVariants = {
 const EnvelopeLetterBase = ({ names, date }: EnvelopeLetterProps) => {
   return (
     <>
-      <p className="envelope__letter-label">Свадебное приглашение</p>
+      <p className="envelope__letter-label">Р РЋР Р†Р В°Р Т‘Р ВµР В±Р Р…Р С•Р Вµ Р С—РЎР‚Р С‘Р С–Р В»Р В°РЎв‚¬Р ВµР Р…Р С‘Р Вµ</p>
       <p className="envelope__letter-names">{names}</p>
       <p className="envelope__letter-date">{date}</p>
     </>
@@ -117,7 +117,7 @@ const WaxSealBase = ({ monogram, isCracked }: WaxSealProps) => {
     <motion.div
       className={`wax-seal ${isCracked ? 'is-cracked' : ''}`}
       variants={sealVariants}
-      transition={{ duration: 0.62, ease: EMPHASIS_EASE }}
+      transition={{ duration: 0.78, ease: EMPHASIS_EASE }}
     >
       <span className="wax-seal__monogram">{monogram}</span>
       <span className="wax-seal__fragment wax-seal__fragment--1" />
@@ -145,7 +145,7 @@ const EnvelopeSceneBase = ({
       initial={false}
       animate={phase}
       variants={envelopeVariants}
-      transition={{ duration: 0.86, ease: BASE_EASE }}
+      transition={{ duration: 1.08, ease: BASE_EASE }}
     >
       <div className="envelope__body">
         <div className="envelope__back" />
@@ -153,7 +153,7 @@ const EnvelopeSceneBase = ({
         <motion.div
           className="envelope__letter"
           variants={letterVariants}
-          transition={{ duration: 0.98, ease: EMPHASIS_EASE }}
+          transition={{ duration: 1.16, ease: EMPHASIS_EASE }}
         >
           <EnvelopeLetter names={names} date={date} />
         </motion.div>
@@ -165,7 +165,7 @@ const EnvelopeSceneBase = ({
         <motion.div
           className="envelope__flap"
           variants={flapVariants}
-          transition={{ duration: 0.92, ease: EMPHASIS_EASE }}
+          transition={{ duration: 1.08, ease: EMPHASIS_EASE }}
         />
 
         <div className="wax-seal-anchor">
@@ -276,7 +276,7 @@ const IntroOverlayBase = ({
       className="intro-overlay"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.4 } }}
+      exit={{ opacity: 0, transition: { duration: 0.52, ease: BASE_EASE } }}
     >
       <div className="intro-overlay__grain" />
 
@@ -288,7 +288,7 @@ const IntroOverlayBase = ({
           disabled={isRunning}
           whileHover={isInteractive ? { scale: 1.012, y: -1.5 } : undefined}
           whileTap={isInteractive ? { scale: 0.997, y: 1 } : undefined}
-          aria-label="Открыть свадебное приглашение"
+          aria-label="Р С›РЎвЂљР С”РЎР‚РЎвЂ№РЎвЂљРЎРЉ РЎРѓР Р†Р В°Р Т‘Р ВµР В±Р Р…Р С•Р Вµ Р С—РЎР‚Р С‘Р С–Р В»Р В°РЎв‚¬Р ВµР Р…Р С‘Р Вµ"
         >
           <EnvelopeScene
             phase={phase}
