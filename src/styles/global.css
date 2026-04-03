@@ -27,7 +27,18 @@ body {
 }
 
 .site-shell {
+  position: relative;
   min-height: 100svh;
+  isolation: isolate;
+}
+
+.site-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .container {
@@ -36,6 +47,8 @@ body {
 }
 
 .invitation-main {
+  position: relative;
+  z-index: 1;
   padding: clamp(1.2rem, 2.6vw, 2.2rem) 0 clamp(2rem, 5vw, 4rem);
 }
 
