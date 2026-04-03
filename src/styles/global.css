@@ -6,7 +6,6 @@
   --color-line: rgba(93, 81, 67, 0.62);
   --color-eyebrow: rgba(126, 103, 75, 0.88);
 
-  --bg-page: #f6ecdc;
   --glass-bg: rgba(255, 255, 255, 0.5);
   --glass-bg-soft: rgba(255, 255, 255, 0.5);
 
@@ -52,7 +51,6 @@ body {
 }
 
 html {
-  background-color: var(--bg-page);
   background-image: url('/images/wedding-bg.jpg');
   background-position: center;
   background-size: cover;
@@ -64,7 +62,10 @@ body {
   font-family: var(--font-body);
   font-weight: 500;
   color: var(--color-text);
-  background-color: var(--bg-page);
+  background-image: url('/images/wedding-bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   position: relative;
   isolation: isolate;
 }
