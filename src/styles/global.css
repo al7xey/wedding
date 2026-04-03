@@ -51,6 +51,14 @@ body {
   overflow-x: clip;
 }
 
+html {
+  background-color: var(--bg-page);
+  background-image: url('/images/wedding-bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -75,6 +83,7 @@ body::before {
 .site-shell {
   min-height: 100vh;
   min-height: 100svh;
+  min-height: 100dvh;
 }
 
 .container {
@@ -366,13 +375,6 @@ body::before {
   }
 }
 
-@media (max-width: 768px) {
-  body {
-    background-image: url('/images/wedding-bg.jpg');
-    background-position: center;
-  }
-}
-
 @media (max-width: 640px) {
   :root {
     --container-gutter-mobile: 2.25rem;
@@ -387,7 +389,10 @@ body::before {
   }
 
   .invitation-main {
-    padding: calc((var(--container-gutter-mobile) / 2) + env(safe-area-inset-top)) 0 2.6rem;
+    padding:
+      calc((var(--container-gutter-mobile) / 2) + env(safe-area-inset-top))
+      0
+      calc(2.6rem + env(safe-area-inset-bottom));
   }
 
   .hero-screen {
@@ -489,7 +494,10 @@ body::before {
   }
 
   .invitation-main {
-    padding: calc((var(--container-gutter-xs) / 2) + env(safe-area-inset-top)) 0 2.4rem;
+    padding:
+      calc((var(--container-gutter-xs) / 2) + env(safe-area-inset-top))
+      0
+      calc(2.4rem + env(safe-area-inset-bottom));
   }
 
   .hero-screen__frame {
