@@ -56,7 +56,22 @@ body {
   font-family: var(--font-body);
   font-weight: 500;
   color: var(--color-text);
-  background: var(--bg-page) center / cover no-repeat url('/images/wedding-bg.jpg');
+  background-color: var(--bg-page);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    url('/images/wedding-bg.jpg') center / cover repeat,
+    url('/images/wedding-bg.jpg') calc(50% + 180px) calc(50% + 120px) / cover repeat;
+  opacity: 1;
+  mix-blend-mode: normal;
+  filter: blur(0.3px);
 }
 
 .site-shell {
@@ -483,5 +498,202 @@ body {
 
   .timeline-item__dot::before {
     animation: none !important;
+  }
+}
+
+.story-section {
+  margin-top: clamp(4rem, 9vw, 7rem);
+}
+
+.story-board {
+  position: relative;
+  min-height: 900px;
+  border-radius: 32px;
+}
+
+.story-board__line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.story-board__line path {
+  fill: none;
+  stroke: rgba(93, 81, 67, 0.78);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 14 16;
+}
+
+.story-board__point {
+  position: absolute;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-dot-soft);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.story-board__point::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--color-dot);
+}
+
+.story-board__point--1 {
+  left: 15%;
+  top: 14%;
+}
+
+.story-board__point--2 {
+  left: 43%;
+  top: 31%;
+}
+
+.story-board__point--3 {
+  left: 63%;
+  top: 48%;
+}
+
+.story-board__point--4 {
+  left: 71%;
+  top: 78%;
+}
+
+.story-photo {
+  position: absolute;
+  z-index: 3;
+  width: clamp(220px, 24vw, 300px);
+  padding: 0.8rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.52);
+  box-shadow: var(--shadow-md);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.story-photo__image-wrap {
+  overflow: hidden;
+  border-radius: 22px;
+  aspect-ratio: 4 / 5;
+}
+
+.story-photo__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-photo__content {
+  padding: 0.9rem 0.4rem 0.2rem;
+}
+
+.story-photo__year {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-eyebrow);
+}
+
+.story-photo__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.18rem, 1.9vw, 1.55rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+.story-photo__text {
+  margin: 0.45rem 0 0;
+  font-size: clamp(0.95rem, 1.3vw, 1.02rem);
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.story-photo--1 {
+  top: 4%;
+  left: 4%;
+  transform: rotate(-4deg);
+}
+
+.story-photo--2 {
+  top: 19%;
+  right: 10%;
+  transform: rotate(5deg);
+}
+
+.story-photo--3 {
+  top: 49%;
+  left: 13%;
+  transform: rotate(-3deg);
+}
+
+.story-photo--4 {
+  top: 69%;
+  right: 6%;
+  transform: rotate(4deg);
+}
+
+@media (max-width: 900px) {
+  .story-board {
+    min-height: 780px;
+  }
+
+  .story-photo {
+    width: clamp(200px, 32vw, 260px);
+  }
+
+  .story-photo--1 {
+    left: 2%;
+  }
+
+  .story-photo--2 {
+    right: 4%;
+  }
+
+  .story-photo--3 {
+    left: 6%;
+  }
+
+  .story-photo--4 {
+    right: 2%;
+  }
+}
+
+@media (max-width: 640px) {
+  .story-board {
+    min-height: auto;
+    display: grid;
+    gap: 1rem;
+    padding-left: 1.6rem;
+  }
+
+  .story-board__line,
+  .story-board__point {
+    display: none;
+  }
+
+  .story-photo,
+  .story-photo--1,
+  .story-photo--2,
+  .story-photo--3,
+  .story-photo--4 {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    transform: none;
   }
 }

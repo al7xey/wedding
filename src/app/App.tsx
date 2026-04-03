@@ -3,17 +3,6 @@ import { useEffect, useState } from 'react'
 const COUNTDOWN_STEP_MS = 1000
 const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
 
-const invitation = {
-  firstName: 'Алексей',
-  secondName: 'Анастасия',
-  date: '17 июля 2026',
-  title: 'Мы будем рады вам',
-  text1:
-    'Дорогие родные и друзья, приглашаем вас разделить с нами один из самых важных дней нашей жизни.',
-  text2:
-    'Место проведения: загородная усадьба. Точный адрес и время отправим дополнительно.',
-} as const
-
 const timelineItems = [
   {
     time: '15:30',
@@ -41,6 +30,37 @@ const timelineItems = [
     time: '21:30',
     title: 'Вечерняя программа',
     description: 'Финальная часть праздника. Подробности сценария скоро.',
+  },
+] as const
+
+const storyItems = [
+  {
+    year: '2022',
+    title: 'Первая встреча',
+    text: 'День, с которого все началось.',
+    image: '/images/story-1.jpg',
+    className: 'story-photo--1',
+  },
+  {
+    year: '2023',
+    title: 'Первые путешествия',
+    text: 'Мы начали собирать наши любимые моменты вместе.',
+    image: '/images/story-2.jpg',
+    className: 'story-photo--2',
+  },
+  {
+    year: '2024',
+    title: 'Еще ближе',
+    text: 'Каждый день рядом становился все важнее.',
+    image: '/images/story-3.jpg',
+    className: 'story-photo--3',
+  },
+  {
+    year: '2026',
+    title: 'Самый важный день',
+    text: 'И теперь мы приглашаем вас разделить его с нами.',
+    image: '/images/story-4.jpg',
+    className: 'story-photo--4',
   },
 ] as const
 
@@ -178,12 +198,12 @@ const App = () => {
             <div className="hero-screen__frame">
               <div className="hero-screen__center">
                 <h1 className="hero-screen__title">
-                  <span>{invitation.firstName}</span>
+                  <span>Алексей</span>
                   <span className="hero-screen__connector">и</span>
-                  <span>{invitation.secondName}</span>
+                  <span>Анастасия</span>
                 </h1>
                 <time className="hero-screen__date" dateTime="2026-07-17">
-                  {invitation.date}
+                  17 июля 2026
                 </time>
               </div>
             </div>
@@ -193,7 +213,7 @@ const App = () => {
         <section className="inv-section">
           <div className="container">
             <header className="section-head">
-              <h2 className="section-title">{invitation.title}</h2>
+              <h2 className="section-title">Мы будем рады вам</h2>
             </header>
 
             <article
@@ -201,8 +221,10 @@ const App = () => {
               data-reveal
               data-reveal-delay="80"
             >
-              <p className="lead-text">{invitation.text1}</p>
-              <p className="lead-text">{invitation.text2}</p>
+              <p className="lead-text">
+                Дорогие родные и друзья, приглашаем вас разделить 
+                с нами один из самых важных дней нашей жизни.
+              </p>
             </article>
           </div>
         </section>
@@ -271,6 +293,61 @@ const App = () => {
                   <p className="countdown-item__label">секунд</p>
                 </article>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="inv-section story-section">
+          <div className="container">
+            <header className="section-head">
+              <h2 className="section-title">Наша история</h2>
+            </header>
+
+            <div
+              className="story-board reveal-on-scroll"
+              data-reveal
+              data-reveal-delay="80"
+            >
+              <svg
+                className="story-board__line"
+                viewBox="0 0 1200 900"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M180 130
+                    C 320 120, 390 240, 500 270
+                    S 710 340, 770 430
+                    S 600 610, 470 640
+                    S 650 760, 860 760"
+                />
+              </svg>
+
+              <span className="story-board__point story-board__point--1" />
+              <span className="story-board__point story-board__point--2" />
+              <span className="story-board__point story-board__point--3" />
+              <span className="story-board__point story-board__point--4" />
+
+              {storyItems.map((item) => (
+                <article
+                  key={item.year + item.title}
+                  className={`story-photo ${item.className}`}
+                >
+                  <div className="story-photo__image-wrap">
+                    <img
+                      className="story-photo__image"
+                      src={item.image}
+                      alt={item.title}
+                    />
+                  </div>
+
+                  <div className="story-photo__content">
+                    <span className="story-photo__year">{item.year}</span>
+                    <h3 className="story-photo__title">{item.title}</h3>
+                    <p className="story-photo__text">{item.text}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
