@@ -375,6 +375,7 @@ body::before {
 
 @media (max-width: 640px) {
   :root {
+    --container-gutter-mobile: 2.25rem;
     --timeline-time-col: 94px;
     --timeline-dot-col: 24px;
     --timeline-gap: 0.58rem;
@@ -386,7 +387,7 @@ body::before {
   }
 
   .invitation-main {
-    padding: 0.85rem 0 2rem;
+    padding: calc((var(--container-gutter-mobile) / 2) + env(safe-area-inset-top)) 0 2.6rem;
   }
 
   .hero-screen {
@@ -396,8 +397,22 @@ body::before {
   .hero-screen__frame {
     min-height: clamp(280px, 54svh, 420px);
     max-height: 420px;
-    padding: 1.2rem 1rem 1.35rem;
+    padding: 1.45rem 1.2rem 1.55rem;
     border-radius: 20px;
+  }
+
+  .soft-card,
+  .countdown-card,
+  .timeline-item {
+    border-radius: 20px;
+  }
+
+  .inv-section {
+    margin-top: clamp(3.4rem, 9vw, 5.2rem);
+  }
+
+  .hero-screen + .inv-section {
+    margin-top: clamp(5rem, 12vw, 7.4rem);
   }
 
   .hero-screen__title {
@@ -463,6 +478,7 @@ body::before {
 
 @media (max-width: 390px) {
   :root {
+    --container-gutter-xs: 2.25rem;
     --timeline-time-col: 88px;
     --timeline-dot-col: 22px;
     --timeline-pad-x: 0.74rem;
@@ -472,10 +488,21 @@ body::before {
     width: min(100%, calc(100% - var(--container-gutter-xs)));
   }
 
+  .invitation-main {
+    padding: calc((var(--container-gutter-xs) / 2) + env(safe-area-inset-top)) 0 2.4rem;
+  }
+
   .hero-screen__frame {
     min-height: clamp(250px, 50svh, 360px);
     max-height: 360px;
     padding: 1rem 0.85rem 1.1rem;
+    border-radius: 18px;
+  }
+
+  .soft-card,
+  .countdown-card,
+  .timeline-item {
+    border-radius: 18px;
   }
 
   .hero-screen__title {
