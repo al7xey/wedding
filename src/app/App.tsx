@@ -108,6 +108,20 @@ const App = () => {
       return
     }
 
+    const getRelativeOffset = (node: HTMLElement, ancestor: HTMLElement) => {
+      let x = 0
+      let y = 0
+      let current: HTMLElement | null = node
+
+      while (current && current !== ancestor) {
+        x += current.offsetLeft
+        y += current.offsetTop
+        current = current.offsetParent as HTMLElement | null
+      }
+
+      return { x, y }
+    }
+
     const syncTimelineLine = () => {
       const dots = timelineList.querySelectorAll<HTMLElement>('.timeline-item__dot')
       if (dots.length === 0) {
@@ -116,13 +130,12 @@ const App = () => {
 
       const firstDot = dots[0]
       const lastDot = dots[dots.length - 1]
-      const listRect = timelineList.getBoundingClientRect()
-      const firstRect = firstDot.getBoundingClientRect()
-      const lastRect = lastDot.getBoundingClientRect()
+      const firstOffset = getRelativeOffset(firstDot, timelineList)
+      const lastOffset = getRelativeOffset(lastDot, timelineList)
 
-      const lineLeft = firstRect.left + firstRect.width / 2 - listRect.left
-      const lineTop = firstRect.top + firstRect.height / 2 - listRect.top
-      const lineBottom = listRect.bottom - (lastRect.top + lastRect.height / 2)
+      const lineLeft = firstOffset.x + firstDot.offsetWidth / 2
+      const lineTop = firstOffset.y + firstDot.offsetHeight / 2
+      const lineBottom = timelineList.offsetHeight - (lastOffset.y + lastDot.offsetHeight / 2)
 
       timelineList.style.setProperty('--timeline-line-left', `${lineLeft}px`)
       timelineList.style.setProperty('--timeline-line-top', `${Math.max(lineTop, 0)}px`)
