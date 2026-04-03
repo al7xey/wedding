@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const invitation = {
   firstName: 'Алексей',
@@ -56,8 +56,17 @@ const timelineItems = [
   },
 ]
 
+const INTRO_VIDEO_SRC = '/video/site-intro.mov'
+const INTRO_OUTRO_MS = 420
+
 const App = () => {
   const [countdown, setCountdown] = useState(getCountdown)
+  const [isIntroPlaying, setIsIntroPlaying] = useState(false)
+  const [isIntroClosing, setIsIntroClosing] = useState(false)
+  const [isIntroComplete, setIsIntroComplete] = useState(false)
+  const [isIntroUnsupported, setIsIntroUnsupported] = useState(false)
+  const introVideoRef = useRef<HTMLVideoElement | null>(null)
+  const introOutroTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
@@ -68,6 +77,26 @@ const App = () => {
   }, [])
 
   useEffect(() => {
+    document.body.classList.toggle('intro-open', !isIntroComplete)
+
+    return () => {
+      document.body.classList.remove('intro-open')
+    }
+  }, [isIntroComplete])
+
+  useEffect(() => {
+    return () => {
+      if (introOutroTimeoutRef.current !== null) {
+        window.clearTimeout(introOutroTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isIntroComplete) {
+      return
+    }
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const revealItems = document.querySelectorAll<HTMLElement>('[data-reveal]')
 
@@ -100,9 +129,13 @@ const App = () => {
     })
 
     return () => observer.disconnect()
-  }, [])
+  }, [isIntroComplete])
 
   useEffect(() => {
+    if (!isIntroComplete) {
+      return
+    }
+
     const timelineList = document.querySelector<HTMLElement>('.timeline-list')
     if (!timelineList) {
       return
@@ -156,10 +189,117 @@ const App = () => {
       window.removeEventListener('resize', syncTimelineLine)
       resizeObserver?.disconnect()
     }
-  }, [])
+  }, [isIntroComplete])
+
+  const syncIntroToStartFrame = () => {
+    if (isIntroPlaying || isIntroComplete) {
+      return
+    }
+
+    const introVideo = introVideoRef.current
+    if (!introVideo) {
+      return
+    }
+
+    introVideo.pause()
+
+    try {
+      introVideo.currentTime = 0
+    } catch {
+      // Some browsers can temporarily block seeking before metadata is available.
+    }
+  }
+
+  const finishIntro = () => {
+    if (isIntroComplete) {
+      return
+    }
+
+    setIsIntroPlaying(false)
+    setIsIntroClosing(true)
+
+    if (introOutroTimeoutRef.current !== null) {
+      window.clearTimeout(introOutroTimeoutRef.current)
+    }
+
+    introOutroTimeoutRef.current = window.setTimeout(() => {
+      setIsIntroComplete(true)
+      setIsIntroClosing(false)
+      introOutroTimeoutRef.current = null
+    }, INTRO_OUTRO_MS)
+  }
+
+  const playIntro = async () => {
+    if (isIntroPlaying || isIntroComplete) {
+      return
+    }
+
+    const introVideo = introVideoRef.current
+    if (!introVideo) {
+      finishIntro()
+      return
+    }
+
+    try {
+      introVideo.currentTime = 0
+      setIsIntroPlaying(true)
+      await introVideo.play()
+    } catch {
+      setIsIntroPlaying(false)
+      setIsIntroUnsupported(true)
+    }
+  }
+
+  const handleIntroTap = () => {
+    if (isIntroUnsupported) {
+      finishIntro()
+      return
+    }
+
+    void playIntro()
+  }
+
+  const handleIntroError = () => {
+    setIsIntroPlaying(false)
+    setIsIntroUnsupported(true)
+  }
 
   return (
     <div className="site-shell">
+      {!isIntroComplete && (
+        <div className={`site-intro${isIntroClosing ? ' site-intro--closing' : ''}`}>
+          <button
+            className="site-intro__tap-zone"
+            type="button"
+            onClick={handleIntroTap}
+            onContextMenu={(event) => event.preventDefault()}
+            disabled={isIntroPlaying}
+            aria-label={isIntroUnsupported ? 'Open invitation' : 'Play intro video'}
+          >
+            <video
+              ref={introVideoRef}
+              className="site-intro__video"
+              preload="metadata"
+              muted
+              controls={false}
+              controlsList="nofullscreen nodownload noplaybackrate noremoteplayback"
+              disablePictureInPicture
+              disableRemotePlayback
+              playsInline
+              onContextMenu={(event) => event.preventDefault()}
+              onLoadedMetadata={syncIntroToStartFrame}
+              onLoadedData={syncIntroToStartFrame}
+              onCanPlay={syncIntroToStartFrame}
+              onEnded={finishIntro}
+              onError={handleIntroError}
+            >
+              <source src={INTRO_VIDEO_SRC} />
+              Your browser does not support the intro video.
+            </video>
+          </button>
+        </div>
+      )}
+
       <main className="invitation-main">
         <section className="hero-screen">
           <div className="container">
