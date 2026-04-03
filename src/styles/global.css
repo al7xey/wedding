@@ -355,7 +355,7 @@ body {
 
 @media (max-width: 768px) {
   body {
-    background-image: url('/images/wedding-bg-mobile.jpg');
+    background-image: url('/images/wedding-bg.jpg');
     background-position: center;
   }
 }
