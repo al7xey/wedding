@@ -1,45 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Manrope:wght@400;500;600&display=swap');
-
 :root {
-  --font-body: 'Manrope', 'Segoe UI', sans-serif;
-  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-script: 'Great Vibes', 'Brush Script MT', cursive;
+  --font-body: 'Onest', 'Segoe UI', sans-serif;
+  --font-timeline-title: 'Forum', 'Times New Roman', serif;
+  --font-serif: 'Great Vibes', 'Times New Roman', serif;
+  --font-script: 'Great Vibes', 'Times New Roman', serif;
 
-  --tone-paper: #fffdf7;
-  --tone-paper-deep: #f7f0e4;
-  --tone-paper-warm: #f4ebdc;
-  --tone-page: #fefcf7;
-  --tone-ivory: #fff9ef;
-  --tone-shell: #efe4d2;
-  --tone-edge: #d3b99f;
-  --tone-gold: #b58b5a;
-  --tone-gold-soft: #d0af86;
-  --tone-brown: #8a4d32;
-  --tone-brown-deep: #5a2f1f;
-  --tone-leaf-1: #d8dfd1;
-  --tone-leaf-2: #b9c8b4;
-  --tone-petal-1: #f7e9e3;
-  --tone-petal-2: #efd6cb;
   --tone-text: #4f4538;
   --tone-text-soft: #7a6d5d;
+  --tone-gold: #b58b5a;
 
-  --surface-card-strong: rgba(255, 255, 255, 0.84);
-  --surface-card-mid: rgba(255, 252, 246, 0.68);
-  --surface-card-soft: rgba(244, 233, 216, 0.76);
-
+  --surface-card-strong: rgba(255, 255, 255, 0.88);
+  --surface-card-soft: rgba(244, 233, 216, 0.75);
   --shadow-soft: 0 14px 34px rgba(102, 82, 56, 0.12);
   --shadow-card: 0 20px 48px rgba(130, 109, 77, 0.14);
   --radius-xl: 28px;
   --radius-lg: 20px;
-  --radius-md: 14px;
-
-  --scroll-progress: 0;
-  --viewport-width: 100vw;
-  --viewport-height: 100vh;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-

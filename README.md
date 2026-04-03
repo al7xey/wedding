@@ -1,34 +1,15 @@
-﻿# Алексей и Анастасия — Wedding Invitation 2026
+# Wedding Site
 
-Одностраничный свадебный сайт-приглашение на `React + TypeScript` (Vite)
+Minimal one-page wedding invitation built with `React + TypeScript + Vite`.
 
-## Сайт
-
-https://алексейианастасия2026.рф
-
-## Что внутри
-
-- интро-сцена с конвертом и анимацией открытия
-- hero-экран с датой свадьбы
-- блок обратного отсчета до свадьбы
-- контентные секции: приветствие, история, таймлайн, место, дресс-код, пожелания, финальный блок
-- адаптивная верстка для desktop/mobile
-
-## Технологии
-
-- React 19
-- TypeScript
-- Vite
-- CSS 
-
-## Локальный запуск
+## Run
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Сборка
+## Build
 
 ```bash
 npm run build
