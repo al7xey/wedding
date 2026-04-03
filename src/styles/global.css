@@ -65,11 +65,8 @@ body {
   font-weight: 500;
   color: var(--color-text);
   background-color: var(--bg-page);
-  background-image: url('/images/wedding-bg.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
   position: relative;
+  isolation: isolate;
 }
 
 body::before {
@@ -82,6 +79,8 @@ body::before {
   opacity: 1;
   mix-blend-mode: normal;
   filter: none;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .site-shell {
@@ -376,15 +375,6 @@ body::before {
   :root {
     --timeline-time-col: 112px;
     --timeline-dot-col: 28px;
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    background-image: url('/images/wedding-bg.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
   }
 }
 
