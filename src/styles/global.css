@@ -1,3 +1,41 @@
+:root {
+  --color-text: #49392b;
+  --color-accent: #b47a33;
+  --color-dot: #5d5143;
+  --color-dot-soft: rgba(93, 81, 67, 0.3);
+  --color-line: rgba(93, 81, 67, 0.62);
+  --color-eyebrow: rgba(126, 103, 75, 0.88);
+
+  --bg-page: #f6ecdc;
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-bg-soft: rgba(255, 255, 255, 0.5);
+
+  --shadow-lg: 0 22px 46px rgba(112, 86, 60, 0.16);
+  --shadow-md: 0 16px 36px rgba(112, 86, 60, 0.14);
+  --shadow-sm: 0 14px 30px rgba(112, 86, 60, 0.12);
+
+  --glass-filter-hero: none;
+  --glass-filter-card: none;
+  --glass-filter-soft: none;
+
+  --inset-border: inset 0 0 0 1px rgba(73, 57, 43, 0.12);
+
+  --container-width: 1080px;
+  --container-gutter: 2.4rem;
+  --container-gutter-mobile: 1.1rem;
+  --container-gutter-xs: 0.8rem;
+
+  --timeline-time-col: 132px;
+  --timeline-dot-col: 34px;
+  --timeline-gap: 0.75rem;
+  --timeline-pad-x: clamp(1rem, 2.5vw, 1.8rem);
+  --timeline-line-top: 0.45rem;
+  --timeline-line-bottom: 0.45rem;
+  --timeline-line-left: calc(
+    var(--timeline-pad-x) + var(--timeline-time-col) + var(--timeline-gap) + (var(--timeline-dot-col) / 2)
+  );
+}
+
 * {
   box-sizing: border-box;
 }
@@ -17,100 +55,17 @@ body {
   margin: 0;
   font-family: var(--font-body);
   font-weight: 500;
-  color: #49392b;
-  background-color: #f6ecdc;
-  background-image: url('/images/wedding-bg.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-body.intro-open {
-  overflow: hidden;
-  touch-action: none;
-}
-
-@media (max-width: 768px) {
-  body {
-    background-image: url('/images/wedding-bg-mobile.jpg');
-    background-position: 50% 50%;
-    background-position-x: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-}
-
-.site-intro {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100svh;
-  height: 100dvh;
-  z-index: 30;
-  overflow: hidden;
-  background: #fff;
-  opacity: 1;
-  transition: opacity 0.42s ease;
-}
-
-.site-intro--closing {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.site-intro__tap-zone {
-  all: unset;
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
-}
-
-.site-intro__tap-zone:disabled {
-  cursor: default;
-}
-
-.site-intro__tap-zone:focus-visible {
-  outline: 2px solid rgba(73, 57, 43, 0.45);
-  outline-offset: -6px;
-}
-
-.site-intro__video {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center;
-  background: #fff;
-}
-
-.site-intro__video::-webkit-media-controls,
-.site-intro__video::-webkit-media-controls-panel,
-.site-intro__video::-webkit-media-controls-play-button,
-.site-intro__video::-webkit-media-controls-start-playback-button {
-  display: none !important;
-  -webkit-appearance: none;
-}
-
-@media (max-width: 768px) {
-  .site-intro,
-  .site-intro__tap-zone,
-  .site-intro__video {
-    width: 100vw;
-    height: 100dvh;
-  }
+  color: var(--color-text);
+  background: var(--bg-page) center / cover no-repeat url('/images/wedding-bg.jpg');
 }
 
 .site-shell {
+  min-height: 100vh;
   min-height: 100svh;
 }
 
 .container {
-  width: min(1080px, calc(100% - 2.4rem));
+  width: min(var(--container-width), calc(100% - var(--container-gutter)));
   margin-inline: auto;
 }
 
@@ -118,40 +73,47 @@ body.intro-open {
   padding: clamp(1.2rem, 2.6vw, 2.2rem) 0 clamp(2rem, 5vw, 4rem);
 }
 
-.hero-screen__frame {
-  position: relative;
-  overflow: hidden;
-  min-height: clamp(400px, 68vw, 620px);
-  border-radius: var(--radius-xl);
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 22px 46px rgba(112, 86, 60, 0.16);
-  backdrop-filter: blur(14px) saturate(130%);
-  -webkit-backdrop-filter: blur(14px) saturate(130%);
-  display: grid;
-  place-items: center;
-  padding: clamp(1.6rem, 5vw, 3.4rem);
+.hero-screen__frame,
+.soft-card,
+.countdown-card,
+.timeline-item {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
-.hero-screen__center {
+.hero-screen__frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: clamp(400px, 68vw, 620px);
+  padding: clamp(1.6rem, 5vw, 3.4rem);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-screen__center,
+.section-head {
   text-align: center;
 }
 
 .hero-screen__eyebrow {
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.26em;
   font-size: 0.78rem;
-  color: rgba(126, 103, 75, 0.88);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-eyebrow);
 }
 
 .hero-screen__title {
-  margin: 1rem 0 1.2rem;
-  line-height: 0.92;
   display: grid;
   gap: 0.2rem;
+  margin: 1rem 0 1.2rem;
   font-family: var(--font-script);
-  color: #b47a33;
   font-size: clamp(3.5rem, 11.5vw, 9.2rem);
+  line-height: 0.92;
+  color: var(--color-accent);
 }
 
 .hero-screen__connector {
@@ -163,20 +125,24 @@ body.intro-open {
   margin: 0;
   font-family: var(--font-serif);
   font-size: clamp(1.6rem, 4.8vw, 3.3rem);
-  color: #b47a33;
   font-style: italic;
+  color: var(--color-accent);
 }
 
 .inv-section {
-  margin: clamp(2.8rem, 6vw, 5rem) 0 0;
+  margin-top: clamp(2.8rem, 6vw, 5rem);
 }
 
 .hero-screen + .inv-section {
   margin-top: clamp(4rem, 9vw, 7rem);
 }
 
+.countdown-section,
+.timeline-section {
+  margin-top: clamp(4rem, 9vw, 7rem);
+}
+
 .section-head {
-  text-align: center;
   margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
 }
 
@@ -185,7 +151,7 @@ body.intro-open {
   font-size: 0.8rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #49392b;
+  color: var(--color-text);
 }
 
 .section-title {
@@ -193,7 +159,7 @@ body.intro-open {
   font-family: var(--font-serif);
   font-size: clamp(2.4rem, 5vw, 3.9rem);
   font-weight: 400;
-  color: #49392b;
+  color: var(--color-text);
   -webkit-text-stroke: 0.35px rgba(73, 57, 43, 0.9);
   text-shadow:
     0.35px 0 0 rgba(73, 57, 43, 0.9),
@@ -205,34 +171,24 @@ body.intro-open {
   overflow: hidden;
   padding: clamp(1.2rem, 3vw, 2.3rem);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 16px 36px rgba(112, 86, 60, 0.14);
-  backdrop-filter: blur(12px) saturate(125%);
-  -webkit-backdrop-filter: blur(12px) saturate(125%);
+  box-shadow: var(--shadow-md);
 }
 
 .lead-text {
   margin: 0;
   font-size: clamp(1rem, 1.6vw, 1.22rem);
   line-height: 1.7;
-  color: #49392b;
+  color: var(--color-text);
 }
 
 .lead-text + .lead-text {
   margin-top: 0.8rem;
 }
 
-.countdown-section {
-  margin-top: clamp(4.2rem, 9.5vw, 7.4rem);
-}
-
 .countdown-card {
-  border-radius: var(--radius-lg);
   padding: clamp(1rem, 2.8vw, 1.8rem);
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 14px 30px rgba(112, 86, 60, 0.12);
-  backdrop-filter: blur(11px) saturate(118%);
-  -webkit-backdrop-filter: blur(11px) saturate(118%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .countdown-grid {
@@ -242,11 +198,11 @@ body.intro-open {
 }
 
 .countdown-item {
-  border-radius: 16px;
   padding: clamp(0.85rem, 2vw, 1.2rem) 0.6rem;
   text-align: center;
-  background: rgba(255, 255, 255, 0.36);
-  box-shadow: inset 0 0 0 1px rgba(73, 57, 43, 0.12);
+  border-radius: 16px;
+  background: var(--glass-bg-soft);
+  box-shadow: var(--inset-border);
 }
 
 .countdown-item__value {
@@ -255,7 +211,7 @@ body.intro-open {
   font-size: clamp(1.85rem, 4.6vw, 2.8rem);
   font-weight: 600;
   line-height: 1;
-  color: #49392b;
+  color: var(--color-text);
 }
 
 .countdown-item__label {
@@ -265,44 +221,27 @@ body.intro-open {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #49392b;
+  color: var(--color-text);
 }
 
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(20px) scale(0.992);
-  filter: blur(1.5px);
   transition:
     opacity 0.65s ease,
-    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
-    filter 0.55s ease;
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .reveal-on-scroll.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
-  filter: blur(0);
-}
-
-.timeline-section {
-  margin-top: clamp(4rem, 9vw, 7rem);
 }
 
 .timeline-list {
   position: relative;
   display: grid;
   gap: 1rem;
-  --timeline-time-col: 132px;
-  --timeline-dot-col: 34px;
-  --timeline-gap: 0.75rem;
-  --timeline-pad-x: clamp(1rem, 2.5vw, 1.8rem);
-  --timeline-line-color: rgba(93, 81, 67, 0.62);
-  --timeline-line-top: 0.45rem;
-  --timeline-line-bottom: 0.45rem;
-  --timeline-line-left: calc(
-    var(--timeline-pad-x) + var(--timeline-time-col) + var(--timeline-gap) + (var(--timeline-dot-col) / 2)
-  );
 }
 
 .timeline-list::before {
@@ -311,15 +250,16 @@ body.intro-open {
   top: var(--timeline-line-top);
   bottom: var(--timeline-line-bottom);
   left: var(--timeline-line-left);
+  z-index: 0;
   width: 3px;
   border-radius: 999px;
+  background: var(--color-line);
   transform: translateX(-50%);
-  background: var(--timeline-line-color);
-  z-index: 0;
 }
 
 .timeline-item {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: var(--timeline-time-col) var(--timeline-dot-col) 1fr;
   align-items: center;
@@ -327,10 +267,12 @@ body.intro-open {
   min-height: 128px;
   padding: 1.25rem var(--timeline-pad-x);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 14px 30px rgba(112, 86, 60, 0.12);
-  backdrop-filter: blur(11px) saturate(118%);
-  -webkit-backdrop-filter: blur(11px) saturate(118%);
+  box-shadow: var(--shadow-sm);
+}
+
+.timeline-item__time,
+.timeline-item__content {
+  position: relative;
   z-index: 1;
 }
 
@@ -339,19 +281,17 @@ body.intro-open {
   font-family: var(--font-body);
   font-size: clamp(2rem, 3.2vw, 2.44rem);
   font-weight: 500;
-  color: #49392b;
-  position: relative;
-  z-index: 1;
+  color: var(--color-text);
 }
 
 .timeline-item__dot {
   position: relative;
+  z-index: 1;
   justify-self: center;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(93, 81, 67, 0.3);
-  z-index: 1;
+  background: var(--color-dot-soft);
 }
 
 .timeline-item__dot::before {
@@ -359,7 +299,7 @@ body.intro-open {
   position: absolute;
   inset: 6px;
   border-radius: 50%;
-  background: #5d5143;
+  background: var(--color-dot);
   animation: dot-pulse 2.6s ease-in-out infinite;
 }
 
@@ -369,33 +309,28 @@ body.intro-open {
   font-size: clamp(1.34rem, 2.3vw, 1.8rem);
   font-weight: 600;
   font-synthesis: weight;
-  color: #49392b;
   line-height: 1.32;
-}
-
-.timeline-item__content {
-  position: relative;
-  z-index: 1;
+  color: var(--color-text);
 }
 
 .timeline-item__description {
   margin: 0.58rem 0 0;
   font-family: var(--font-body);
-  color: #49392b;
   font-size: clamp(1rem, 1.6vw, 1.22rem);
   line-height: 1.62;
+  color: var(--color-text);
 }
 
 @keyframes dot-pulse {
   0%,
   100% {
-    transform: scale(1);
     opacity: 1;
+    transform: scale(1);
   }
 
   50% {
-    transform: scale(1.12);
     opacity: 0.72;
+    transform: scale(1.12);
   }
 }
 
@@ -412,15 +347,29 @@ body.intro-open {
     font-size: clamp(2.8rem, 7.6vw, 4rem);
   }
 
-  .timeline-list {
+  :root {
     --timeline-time-col: 112px;
     --timeline-dot-col: 28px;
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    background-image: url('/images/wedding-bg-mobile.jpg');
+    background-position: center;
+  }
+}
+
 @media (max-width: 640px) {
+  :root {
+    --timeline-time-col: 94px;
+    --timeline-dot-col: 24px;
+    --timeline-gap: 0.58rem;
+    --timeline-pad-x: 0.9rem;
+  }
+
   .container {
-    width: min(100%, calc(100% - 1.1rem));
+    width: min(100%, calc(100% - var(--container-gutter-mobile)));
   }
 
   .invitation-main {
@@ -434,8 +383,8 @@ body.intro-open {
   .hero-screen__frame {
     min-height: clamp(280px, 54svh, 420px);
     max-height: 420px;
-    border-radius: 20px;
     padding: 1.2rem 1rem 1.35rem;
+    border-radius: 20px;
   }
 
   .hero-screen__title {
@@ -466,13 +415,6 @@ body.intro-open {
 
   .countdown-item__value {
     font-size: clamp(1.7rem, 8.8vw, 2.2rem);
-  }
-
-  .timeline-list {
-    --timeline-time-col: 94px;
-    --timeline-dot-col: 24px;
-    --timeline-gap: 0.58rem;
-    --timeline-pad-x: 0.9rem;
   }
 
   .timeline-item {
@@ -507,8 +449,14 @@ body.intro-open {
 }
 
 @media (max-width: 390px) {
+  :root {
+    --timeline-time-col: 88px;
+    --timeline-dot-col: 22px;
+    --timeline-pad-x: 0.74rem;
+  }
+
   .container {
-    width: min(100%, calc(100% - 0.8rem));
+    width: min(100%, calc(100% - var(--container-gutter-xs)));
   }
 
   .hero-screen__frame {
@@ -521,12 +469,6 @@ body.intro-open {
     font-size: clamp(2.95rem, 17.8vw, 4.6rem);
   }
 
-  .timeline-list {
-    --timeline-time-col: 88px;
-    --timeline-dot-col: 22px;
-    --timeline-pad-x: 0.74rem;
-  }
-
   .timeline-item {
     padding: 0.88rem 0.74rem;
   }
@@ -536,7 +478,6 @@ body.intro-open {
   .reveal-on-scroll {
     opacity: 1 !important;
     transform: none !important;
-    filter: none !important;
     transition: none !important;
   }
 
