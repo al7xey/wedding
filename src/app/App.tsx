@@ -305,6 +305,36 @@ const App = () => {
   const [isVenueMapLoaded, setIsVenueMapLoaded] = useState(false)
 
   useEffect(() => {
+    const isIOSDevice =
+      /iP(hone|ad|od)/.test(window.navigator.userAgent) ||
+      (window.navigator.platform === 'MacIntel' &&
+        window.navigator.maxTouchPoints > 1)
+
+    if (!isIOSDevice) {
+      return
+    }
+
+    const root = document.documentElement
+
+    const syncIOSViewportHeight = () => {
+      const visualHeight = window.visualViewport?.height ?? 0
+      const viewportHeight = Math.max(window.innerHeight, visualHeight)
+      root.style.setProperty('--ios-full-height', `${Math.round(viewportHeight)}px`)
+    }
+
+    syncIOSViewportHeight()
+    window.addEventListener('resize', syncIOSViewportHeight)
+    window.addEventListener('orientationchange', syncIOSViewportHeight)
+    window.visualViewport?.addEventListener('resize', syncIOSViewportHeight)
+
+    return () => {
+      window.removeEventListener('resize', syncIOSViewportHeight)
+      window.removeEventListener('orientationchange', syncIOSViewportHeight)
+      window.visualViewport?.removeEventListener('resize', syncIOSViewportHeight)
+    }
+  }, [])
+
+  useEffect(() => {
     const revealItems = Array.from(
       document.querySelectorAll<HTMLElement>('[data-reveal]'),
     )

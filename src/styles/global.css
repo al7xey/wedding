@@ -45,6 +45,7 @@
 
   --app-min-height: 100vh;
   --app-background-height: 100vh;
+  --ios-full-height: 100vh;
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -87,6 +88,10 @@ html {
   height: 100%;
   height: -webkit-fill-available;
   background-color: #ece2d6;
+  background-image: url('/images/wedding-bg-mobile.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 body {
@@ -111,7 +116,8 @@ body {
   position: fixed;
   top: calc(-1 * var(--safe-area-top));
   height: calc(
-    var(--app-background-height) + var(--safe-area-top) + var(--safe-area-bottom)
+    max(var(--app-background-height), var(--ios-full-height)) + var(--safe-area-top) +
+      var(--safe-area-bottom)
   );
   right: calc(-1 * var(--safe-area-right));
   left: calc(-1 * var(--safe-area-left));
@@ -121,6 +127,7 @@ body {
 }
 
 @media (min-width: 768px) {
+  html,
   .app-background {
     background-image: url('/images/wedding-bg.jpg');
   }
