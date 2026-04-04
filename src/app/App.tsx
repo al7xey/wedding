@@ -813,6 +813,14 @@ const App = () => {
           </section>
         )}
 
+        <section className="inv-section final-message-section">
+          <div className="container">
+            <p className="final-message reveal-on-scroll" data-reveal data-reveal-delay="120">
+              Ждем вас на нашей свадьбе!
+            </p>
+          </div>
+        </section>
+
       </main>
     </div>
   )
