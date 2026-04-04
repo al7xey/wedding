@@ -5,6 +5,9 @@ const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
 const ROAD_PROGRESS_START = 0.16
 const ROAD_PROGRESS_END = 1.2
 const ROAD_SMOOTHING_FACTOR = 0.12
+const VENUE_MAP_LINK = 'https://yandex.ru/maps/-/CPf4aPmn'
+const VENUE_MAP_WIDGET_URL =
+  'https://yandex.ru/map-widget/v1/?mode=search&text=%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B0%D0%BB%20%D0%9D%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C,%20%D0%9C%D0%B0%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0,%2011%D0%90&z=17'
 
 const timelineItems = [
   {
@@ -97,6 +100,14 @@ const STORY_PATH_POINTS: readonly StoryPathPoint[] = [
 ]
 
 const STORY_PATH_SMOOTHNESS = 1
+const CALENDAR_WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as const
+const JULY_2026_DAYS_IN_MONTH = 31
+const JULY_2026_WEEK_START_OFFSET = 2
+const WEDDING_DAY_OF_MONTH = 17
+const JULY_2026_CALENDAR_CELLS: ReadonlyArray<number | null> = [
+  ...Array.from({ length: JULY_2026_WEEK_START_OFFSET }, () => null),
+  ...Array.from({ length: JULY_2026_DAYS_IN_MONTH }, (_, index) => index + 1),
+]
 
 const buildSmoothStoryPath = (points: readonly StoryPathPoint[]) => {
   if (points.length < 2) {
@@ -144,6 +155,56 @@ const formatTwoDigits = (value: number) => String(value).padStart(2, '0')
 const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+const WeddingCalendarCard = () => {
+  return (
+    <article
+      className="wedding-calendar reveal-on-scroll"
+      data-reveal
+      data-reveal-delay="100"
+    >
+      <div className="wedding-calendar__top">
+        <p className="wedding-calendar__month">Июль 2026</p>
+        <time className="wedding-calendar__date" dateTime="2026-07-17">
+          17 июля
+        </time>
+      </div>
+
+      <div className="wedding-calendar__grid" role="grid" aria-label="Календарь июля 2026">
+        {CALENDAR_WEEKDAYS.map((weekDay) => (
+          <span key={weekDay} className="wedding-calendar__weekday" aria-hidden="true">
+            {weekDay}
+          </span>
+        ))}
+
+        {JULY_2026_CALENDAR_CELLS.map((day, index) =>
+          day === null ? (
+            <span
+              key={`empty-${index}`}
+              className="wedding-calendar__day wedding-calendar__day--empty"
+              aria-hidden="true"
+            />
+          ) : (
+            <time
+              key={day}
+              className={`wedding-calendar__day${day === WEDDING_DAY_OF_MONTH ? ' wedding-calendar__day--wedding' : ''}`}
+              dateTime={`2026-07-${formatTwoDigits(day)}`}
+              aria-label={
+                day === WEDDING_DAY_OF_MONTH
+                  ? '17 июля 2026 — день свадьбы'
+                  : `${day} июля 2026`
+              }
+            >
+              {day}
+            </time>
+          ),
+        )}
+      </div>
+
+      <p className="wedding-calendar__note">Пятница, 17 июля 2026</p>
+    </article>
+  )
+}
 
 const CountdownCard = () => {
   const [countdown, setCountdown] = useState(getCountdown)
@@ -644,6 +705,51 @@ const App = () => {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="inv-section wedding-date-section">
+          <div className="container">
+            <header className="section-head">
+              <h2 className="section-title">Дата свадьбы</h2>
+            </header>
+
+            <WeddingCalendarCard />
+          </div>
+        </section>
+
+        <section className="inv-section venue-section">
+          <div className="container">
+            <header className="section-head">
+              <h2 className="section-title">Место проведения</h2>
+            </header>
+
+            <article className="venue-card reveal-on-scroll" data-reveal data-reveal-delay="100">
+              <div className="venue-card__details">
+                <p className="venue-card__label">Банкетный зал</p>
+                <h3 className="venue-card__title">«Националь»</h3>
+                <p className="venue-card__address">Магистральная улица, 11А</p>
+                <a
+                  className="venue-card__link"
+                  href={VENUE_MAP_LINK}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Открыть в Яндекс Картах
+                </a>
+              </div>
+
+              <div className="venue-card__map-wrap">
+                <iframe
+                  className="venue-card__map"
+                  title="Карта: банкетный зал «Националь»"
+                  src={VENUE_MAP_WIDGET_URL}
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+                <span className="venue-card__map-glass" aria-hidden="true" />
+              </div>
+            </article>
           </div>
         </section>
 
