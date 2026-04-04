@@ -326,11 +326,15 @@ const App = () => {
     window.addEventListener('resize', syncIOSViewportHeight)
     window.addEventListener('orientationchange', syncIOSViewportHeight)
     window.visualViewport?.addEventListener('resize', syncIOSViewportHeight)
+    window.visualViewport?.addEventListener('scroll', syncIOSViewportHeight)
+    window.addEventListener('scroll', syncIOSViewportHeight, { passive: true })
 
     return () => {
       window.removeEventListener('resize', syncIOSViewportHeight)
       window.removeEventListener('orientationchange', syncIOSViewportHeight)
       window.visualViewport?.removeEventListener('resize', syncIOSViewportHeight)
+      window.visualViewport?.removeEventListener('scroll', syncIOSViewportHeight)
+      window.removeEventListener('scroll', syncIOSViewportHeight)
     }
   }, [])
 
@@ -629,10 +633,8 @@ const App = () => {
   }, [])
 
   return (
-    <>
-      <div className="app-background" aria-hidden="true" />
-      <div className="site-shell">
-        <main className="invitation-main">
+    <div className="site-shell">
+      <main className="invitation-main">
         <section className="hero-screen">
           <div className="container">
             <div className="hero-screen__frame">
@@ -870,9 +872,8 @@ const App = () => {
           </div>
         </section>
 
-        </main>
-      </div>
-    </>
+      </main>
+    </div>
   )
 }
 

@@ -47,6 +47,7 @@
   --app-background-height: 100vh;
   --ios-full-height: 100vh;
   --background-bleed: 24px;
+  --page-background-image: url('/images/wedding-bg-mobile.jpg');
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -75,6 +76,12 @@
   }
 }
 
+@media (min-width: 768px) {
+  :root {
+    --page-background-image: url('/images/wedding-bg.jpg');
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -89,7 +96,7 @@ html {
   min-height: 100%;
   height: 100%;
   height: -webkit-fill-available;
-  background-image: url('/images/wedding-bg-mobile.jpg');
+  background-image: var(--page-background-image);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -97,44 +104,45 @@ html {
 
 body {
   min-height: 100%;
-  min-height: var(--app-min-height);
+  min-height: max(var(--app-min-height), var(--ios-full-height));
   margin: 0;
   font-family: var(--font-body);
   font-weight: 500;
   color: var(--color-text);
   background: transparent;
   position: relative;
+  isolation: isolate;
 }
 
 #root {
   min-height: 100%;
-  min-height: var(--app-min-height);
+  min-height: max(var(--app-min-height), var(--ios-full-height));
   position: relative;
   isolation: isolate;
 }
 
-.app-background {
+body::before {
+  content: '';
   position: fixed;
   top: calc((-1 * var(--safe-area-top)) - var(--background-bleed));
   right: calc((-1 * var(--safe-area-right)) - var(--background-bleed));
-  bottom: calc((-1 * var(--safe-area-bottom)) - var(--background-bleed));
   left: calc((-1 * var(--safe-area-left)) - var(--background-bleed));
-  z-index: 0;
+  height: calc(
+    max(var(--app-background-height), var(--ios-full-height)) +
+      var(--safe-area-top) +
+      var(--safe-area-bottom) +
+      (var(--background-bleed) * 2)
+  );
+  z-index: -1;
   pointer-events: none;
-  background: url('/images/wedding-bg-mobile.jpg') center / cover no-repeat;
-}
-
-@media (min-width: 768px) {
-  html,
-  .app-background {
-    background-image: url('/images/wedding-bg.jpg');
-  }
+  background-image: var(--page-background-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .site-shell {
-  position: relative;
-  z-index: 1;
-  min-height: var(--app-min-height);
+  min-height: max(var(--app-min-height), var(--ios-full-height));
   padding-left: var(--safe-area-left);
   padding-right: var(--safe-area-right);
 }
