@@ -302,6 +302,7 @@ const App = () => {
     useLazySectionVisibility('280px 0px')
   const { isVisible: isCountdownVisible, sentinelRef: countdownSentinelRef } =
     useLazySectionVisibility('220px 0px')
+  const [isVenueMapLoaded, setIsVenueMapLoaded] = useState(false)
 
   useEffect(() => {
     const revealItems = Array.from(
@@ -742,14 +743,30 @@ const App = () => {
               </div>
 
               <div className="venue-card__map-wrap">
-                <iframe
-                  className="venue-card__map"
-                  title="Карта: банкетный зал «Националь»"
-                  src={VENUE_MAP_WIDGET_URL}
-                  loading="lazy"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                />
-                <span className="venue-card__map-glass" aria-hidden="true" />
+                {isVenueMapLoaded ? (
+                  <>
+                    <iframe
+                      className="venue-card__map"
+                      title="Карта: банкетный зал «Националь»"
+                      src={VENUE_MAP_WIDGET_URL}
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                    />
+                    <span className="venue-card__map-glass" aria-hidden="true" />
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="venue-card__map-placeholder"
+                    onClick={() => setIsVenueMapLoaded(true)}
+                    aria-label="Загрузить карту Яндекс"
+                  >
+                    <span className="venue-card__map-placeholder-title">Открыть карту</span>
+                    <span className="venue-card__map-placeholder-text">
+                      Загрузим карту после нажатия, чтобы сайт работал стабильнее.
+                    </span>
+                  </button>
+                )}
               </div>
             </article>
           </div>
