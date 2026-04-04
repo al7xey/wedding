@@ -598,8 +598,10 @@ const App = () => {
   }, [])
 
   return (
-    <div className="site-shell">
-      <main className="invitation-main">
+    <>
+      <div className="app-background" aria-hidden="true" />
+      <div className="site-shell">
+        <main className="invitation-main">
         <section className="hero-screen">
           <div className="container">
             <div className="hero-screen__frame">
@@ -821,8 +823,9 @@ const App = () => {
           </div>
         </section>
 
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   )
 }
 
