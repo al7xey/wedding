@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 
 const COUNTDOWN_STEP_MS = 1000
 const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
+const ROAD_PROGRESS_START = 0.16
+const ROAD_PROGRESS_END = 1.2
+const ROAD_SMOOTHING_FACTOR = 0.12
 
 const timelineItems = [
   {
@@ -33,6 +36,99 @@ const timelineItems = [
   },
 ] as const
 
+const storyPhotos = [
+  {
+    year: 'Март 2023',
+    title: 'Знакомство',
+    text: 'Играли деда и бабку в "Пасхальном колобке"',
+    alt: 'Знакомство',
+    imageSrc: '/images/story-1.jpg',
+  },
+  {
+    year: 'Июнь 2023',
+    title: 'Первое свидание',
+    text: 'Одно из наших первых свиданий было на крыше',
+    alt: 'Первое свидание',
+    imageSrc: '/images/story-2.jpg',
+  },
+  {
+    year: 'Август 2024',
+    title: 'Первое путешествие',
+    text: 'Душевная поездка в Оптину пустынь',
+    alt: 'Первое совместное путешествие',
+    imageSrc: '/images/story-3.jpg',
+  },
+  {
+    year: 'Сентябрь 2024',
+    title: 'Поступление в Москву',
+    text: 'Почти 2 года отношений на расстоянии',
+    alt: 'Поступление в Москву',
+    imageSrc: '/images/story-4.jpg',
+  },
+  {
+    year: 'Июль 2025',
+    title: 'Да!',
+    text: 'Незабываемое предложение руки и сердца в Москва-Сити',
+    alt: 'Предложение',
+    imageSrc: '/images/story-5.jpg',
+  },
+] as const
+
+const storyPointClasses = [
+  'story-board__point--1',
+  'story-board__point--2',
+  'story-board__point--3',
+  'story-board__point--4',
+  'story-board__point--5',
+] as const
+
+type StoryPathPoint = readonly [number, number]
+
+const STORY_PATH_POINTS: readonly StoryPathPoint[] = [
+  [456, 174],
+  [722, 306],
+  [722, 538],
+  [126, 657],
+  [250, 782],
+  [712, 884],
+  [688, 1010],
+  [360, 1138],
+  [366, 1220],
+]
+
+const STORY_PATH_SMOOTHNESS = 1
+
+const buildSmoothStoryPath = (points: readonly StoryPathPoint[]) => {
+  if (points.length < 2) {
+    return ''
+  }
+
+  const [startX, startY] = points[0]
+  const controlScale = STORY_PATH_SMOOTHNESS / 6
+  const segments = [`M${startX} ${startY}`]
+
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const [x0, y0] = points[index > 0 ? index - 1 : index]
+    const [x1, y1] = points[index]
+    const [x2, y2] = points[index + 1]
+    const [x3, y3] =
+      index + 2 < points.length ? points[index + 2] : points[index + 1]
+
+    const controlPoint1X = x1 + (x2 - x0) * controlScale
+    const controlPoint1Y = y1 + (y2 - y0) * controlScale
+    const controlPoint2X = x2 - (x3 - x1) * controlScale
+    const controlPoint2Y = y2 - (y3 - y1) * controlScale
+
+    segments.push(
+      `C ${controlPoint1X.toFixed(1)} ${controlPoint1Y.toFixed(1)}, ${controlPoint2X.toFixed(1)} ${controlPoint2Y.toFixed(1)}, ${x2} ${y2}`,
+    )
+  }
+
+  return segments.join(' ')
+}
+
+const STORY_PATH_D = buildSmoothStoryPath(STORY_PATH_POINTS)
+
 const getCountdown = () => {
   const diffMs = Math.max(0, WEDDING_DATE_TIMESTAMP - Date.now())
 
@@ -45,8 +141,11 @@ const getCountdown = () => {
 }
 
 const formatTwoDigits = (value: number) => String(value).padStart(2, '0')
+const prefersReducedMotion = () =>
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const App = () => {
+const CountdownCard = () => {
   const [countdown, setCountdown] = useState(getCountdown)
 
   useEffect(() => {
@@ -58,6 +157,91 @@ const App = () => {
     return () => window.clearInterval(timerId)
   }, [])
 
+  return (
+    <div
+      className="countdown-card reveal-on-scroll"
+      data-reveal
+      data-reveal-delay="60"
+    >
+      <div className="countdown-grid">
+        <article className="countdown-item">
+          <p className="countdown-item__value">{countdown.days}</p>
+          <p className="countdown-item__label">дней</p>
+        </article>
+
+        <article className="countdown-item">
+          <p className="countdown-item__value">
+            {formatTwoDigits(countdown.hours)}
+          </p>
+          <p className="countdown-item__label">часов</p>
+        </article>
+
+        <article className="countdown-item">
+          <p className="countdown-item__value">
+            {formatTwoDigits(countdown.minutes)}
+          </p>
+          <p className="countdown-item__label">минут</p>
+        </article>
+
+        <article className="countdown-item">
+          <p className="countdown-item__value">
+            {formatTwoDigits(countdown.seconds)}
+          </p>
+          <p className="countdown-item__label">секунд</p>
+        </article>
+      </div>
+    </div>
+  )
+}
+
+const useLazySectionVisibility = (rootMargin: string) => {
+  const [isVisible, setIsVisible] = useState(false)
+  const sentinelRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (isVisible) {
+      return
+    }
+
+    const sentinel = sentinelRef.current
+    if (!sentinel) {
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        if (!entries.some((entry) => entry.isIntersecting)) {
+          return
+        }
+
+        setIsVisible(true)
+        currentObserver.disconnect()
+      },
+      {
+        rootMargin,
+        threshold: 0.01,
+      },
+    )
+
+    observer.observe(sentinel)
+
+    return () => observer.disconnect()
+  }, [isVisible, rootMargin])
+
+  return { isVisible, sentinelRef }
+}
+
+const App = () => {
+  const { isVisible: isTimelineVisible, sentinelRef: timelineSentinelRef } =
+    useLazySectionVisibility('280px 0px')
+  const { isVisible: isCountdownVisible, sentinelRef: countdownSentinelRef } =
+    useLazySectionVisibility('220px 0px')
+
   useEffect(() => {
     const revealItems = Array.from(
       document.querySelectorAll<HTMLElement>('[data-reveal]'),
@@ -67,7 +251,16 @@ const App = () => {
       return
     }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealItems.forEach((item) => {
+      item.style.transitionDelay = `${item.dataset.revealDelay ?? '0'}ms`
+    })
+
+    if (prefersReducedMotion()) {
+      revealItems.forEach((item) => item.classList.add('is-visible'))
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
       revealItems.forEach((item) => item.classList.add('is-visible'))
       return
     }
@@ -90,18 +283,27 @@ const App = () => {
     )
 
     revealItems.forEach((item) => {
-      item.style.transitionDelay = `${item.dataset.revealDelay ?? '0'}ms`
+      if (item.classList.contains('is-visible')) {
+        return
+      }
+
       observer.observe(item)
     })
 
     return () => observer.disconnect()
-  }, [])
+  }, [isTimelineVisible, isCountdownVisible])
 
   useEffect(() => {
+    if (!isTimelineVisible) {
+      return
+    }
+
     const timelineList = document.querySelector<HTMLElement>('.timeline-list')
     if (!timelineList) {
       return
     }
+
+    let isActive = false
 
     const getRelativeOffset = (node: HTMLElement, ancestor: HTMLElement) => {
       let left = 0
@@ -142,20 +344,195 @@ const App = () => {
       )
     }
 
-    const frameId = requestAnimationFrame(syncTimelineLine)
-    window.addEventListener('resize', syncTimelineLine)
+    const enableTimelineSync = () => {
+      if (isActive) {
+        return
+      }
+
+      isActive = true
+      requestAnimationFrame(syncTimelineLine)
+      window.addEventListener('resize', syncTimelineLine)
+      resizeObserver?.observe(timelineList)
+    }
 
     const resizeObserver =
       'ResizeObserver' in window
         ? new ResizeObserver(syncTimelineLine)
         : null
 
-    resizeObserver?.observe(timelineList)
+    const activateObserver =
+      'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            (entries, observer) => {
+              if (!entries.some((entry) => entry.isIntersecting)) {
+                return
+              }
+
+              observer.disconnect()
+              enableTimelineSync()
+            },
+            {
+              rootMargin: '220px 0px',
+              threshold: 0.01,
+            },
+          )
+        : null
+
+    if (activateObserver) {
+      activateObserver.observe(timelineList)
+    } else {
+      enableTimelineSync()
+    }
 
     return () => {
-      cancelAnimationFrame(frameId)
+      activateObserver?.disconnect()
       window.removeEventListener('resize', syncTimelineLine)
       resizeObserver?.disconnect()
+    }
+  }, [isTimelineVisible])
+
+  useEffect(() => {
+    const storyBoard = document.querySelector<HTMLElement>('.story-board')
+    if (!storyBoard) {
+      return
+    }
+
+    const photos = Array.from(
+      storyBoard.querySelectorAll<HTMLElement>('.story-photo'),
+    )
+
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(max, Math.max(min, value))
+
+    if (prefersReducedMotion()) {
+      storyBoard.style.setProperty('--story-progress', '1')
+      photos.forEach((photo) => photo.style.setProperty('--story-photo-progress', '1'))
+      return
+    }
+
+    let syncRafId = 0
+    let roadAnimRafId = 0
+    let hasActiveListeners = false
+    let renderedRoadProgress = 0
+    let targetRoadProgress = 0
+
+    const animateRoadProgress = () => {
+      roadAnimRafId = 0
+
+      const delta = targetRoadProgress - renderedRoadProgress
+      if (Math.abs(delta) <= 0.001) {
+        renderedRoadProgress = targetRoadProgress
+        storyBoard.style.setProperty('--story-progress', renderedRoadProgress.toFixed(3))
+        return
+      }
+
+      renderedRoadProgress += delta * ROAD_SMOOTHING_FACTOR
+      storyBoard.style.setProperty('--story-progress', renderedRoadProgress.toFixed(3))
+      roadAnimRafId = requestAnimationFrame(animateRoadProgress)
+    }
+
+    const syncStoryProgress = () => {
+      syncRafId = 0
+
+      const rect = storyBoard.getBoundingClientRect()
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight
+      const startPoint = viewportHeight * 0.9
+      const endPoint = -rect.height * 0.62
+      const progress = clamp(
+        (startPoint - rect.top) / (startPoint - endPoint),
+        0,
+        1,
+      )
+
+      const rawRoadProgress = clamp(
+        (progress - ROAD_PROGRESS_START) / (ROAD_PROGRESS_END - ROAD_PROGRESS_START),
+        0,
+        1,
+      )
+      const roadProgress =
+        rawRoadProgress * rawRoadProgress * (3 - 2 * rawRoadProgress)
+      targetRoadProgress = roadProgress
+
+      if (roadAnimRafId === 0) {
+        roadAnimRafId = requestAnimationFrame(animateRoadProgress)
+      }
+
+      const revealRangeStart = 0.14
+      const revealRangeEnd = 0.92
+      const segments = Math.max(1, photos.length - 1)
+      const revealStep = (revealRangeEnd - revealRangeStart) / segments
+      const revealDuration = Math.max(0.2, revealStep * 0.92)
+
+      photos.forEach((photo, index) => {
+        const revealStart = revealRangeStart + index * revealStep
+        const photoProgress = clamp(
+          (progress - revealStart) / revealDuration,
+          0,
+          1,
+        )
+
+        photo.style.setProperty('--story-photo-progress', photoProgress.toFixed(3))
+      })
+    }
+
+    const requestSync = () => {
+      if (syncRafId !== 0) {
+        return
+      }
+
+      syncRafId = requestAnimationFrame(syncStoryProgress)
+    }
+
+    const enableStorySync = () => {
+      if (hasActiveListeners) {
+        return
+      }
+
+      hasActiveListeners = true
+      syncStoryProgress()
+      window.addEventListener('scroll', requestSync, { passive: true })
+      window.addEventListener('resize', requestSync)
+    }
+
+    const activateObserver =
+      'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            (entries, observer) => {
+              if (!entries.some((entry) => entry.isIntersecting)) {
+                return
+              }
+
+              observer.disconnect()
+              enableStorySync()
+            },
+            {
+              rootMargin: '260px 0px',
+              threshold: 0.01,
+            },
+          )
+        : null
+
+    if (activateObserver) {
+      activateObserver.observe(storyBoard)
+    } else {
+      enableStorySync()
+    }
+
+    return () => {
+      activateObserver?.disconnect()
+      if (syncRafId !== 0) {
+        cancelAnimationFrame(syncRafId)
+      }
+
+      if (roadAnimRafId !== 0) {
+        cancelAnimationFrame(roadAnimRafId)
+      }
+
+      if (hasActiveListeners) {
+        window.removeEventListener('scroll', requestSync)
+        window.removeEventListener('resize', requestSync)
+      }
     }
   }, [])
 
@@ -191,32 +568,78 @@ const App = () => {
               data-reveal-delay="80"
             >
               <p className="lead-text">
-                Дорогие родные и друзья, приглашаем вас разделить 
-                с нами один из самых важных дней нашей жизни.
+                Дорогие родные и близкие, приглашаем вас на один из
+                самых важных и счастливых дней нашей жизни. Ваше
+                присутствие сделает этот праздник по-настоящему тёплым
+                и незабываемым для нас. Нам очень важно, чтобы именно
+                в этот день рядом были те, кто дорог нашему сердцу.
+                Разделите с нами радость рождения новой семьи!
               </p>
             </article>
           </div>
         </section>
 
-        <section className="inv-section timeline-section">
+        <section className="inv-section story-section">
           <div className="container">
             <header className="section-head">
-              <h2 className="section-title">План праздника</h2>
+              <h2 className="section-title">Наша история</h2>
             </header>
 
-            <div className="timeline-list">
-              {timelineItems.map((item, index) => (
-                <article
-                  key={`${item.time}-${item.title}`}
-                  className="timeline-item reveal-on-scroll"
-                  data-reveal
-                  data-reveal-delay={String(90 + index * 75)}
-                >
-                  <p className="timeline-item__time">{item.time}</p>
-                  <span className="timeline-item__dot" aria-hidden="true" />
-                  <div className="timeline-item__content">
-                    <h3 className="timeline-item__title">{item.title}</h3>
-                    <p className="timeline-item__description">{item.description}</p>
+            <div className="story-board">
+              <svg
+                className="story-board__line"
+                viewBox="0 0 1000 1240"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <defs>
+                  <mask id="story-road-reveal">
+                    <rect x="0" y="0" width="1000" height="1240" fill="black" />
+                    <path
+                      className="story-board__mask-path"
+                      d={STORY_PATH_D}
+                      pathLength={1}
+                    />
+                  </mask>
+                </defs>
+
+                <path
+                  className="story-board__path story-board__path--active"
+                  d={STORY_PATH_D}
+                  mask="url(#story-road-reveal)"
+                />
+              </svg>
+
+              {storyPointClasses.map((pointClass) => (
+                <span
+                  key={pointClass}
+                  className={`story-board__point ${pointClass}`}
+                  aria-hidden="true"
+                />
+              ))}
+
+              {storyPhotos.map((photo, index) => (
+                <article key={photo.title} className={`story-photo story-photo--${index + 1}`}>
+                  <div className="story-photo__image-wrap">
+                    <img
+                      className="story-photo__image"
+                      src={photo.imageSrc ?? '/images/wedding-bg-mobile.jpg'}
+                      srcSet={
+                        photo.imageSrc
+                          ? `${photo.imageSrc} 1024w`
+                          : '/images/wedding-bg-mobile.jpg 640w, /images/wedding-bg.jpg 1024w'
+                      }
+                      sizes="(max-width: 640px) 35vw, (max-width: 980px) 28vw, 286px"
+                      alt={photo.alt}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                    />
+                  </div>
+                  <div className="story-photo__content">
+                    <span className="story-photo__year">{photo.year}</span>
+                    <h3 className="story-photo__title">{photo.title}</h3>
+                    <p className="story-photo__text">{photo.text}</p>
                   </div>
                 </article>
               ))}
@@ -224,47 +647,65 @@ const App = () => {
           </div>
         </section>
 
-        <section className="inv-section countdown-section">
-          <div className="container">
-            <header className="section-head">
-              <h2 className="section-title">До свадьбы осталось</h2>
-            </header>
+        {isTimelineVisible ? (
+          <section className="inv-section timeline-section">
+            <div className="container">
+              <header className="section-head">
+                <h2 className="section-title">План праздника</h2>
+              </header>
 
-            <div
-              className="countdown-card reveal-on-scroll"
-              data-reveal
-              data-reveal-delay="60"
-            >
-              <div className="countdown-grid">
-                <article className="countdown-item">
-                  <p className="countdown-item__value">{countdown.days}</p>
-                  <p className="countdown-item__label">дней</p>
-                </article>
-
-                <article className="countdown-item">
-                  <p className="countdown-item__value">
-                    {formatTwoDigits(countdown.hours)}
-                  </p>
-                  <p className="countdown-item__label">часов</p>
-                </article>
-
-                <article className="countdown-item">
-                  <p className="countdown-item__value">
-                    {formatTwoDigits(countdown.minutes)}
-                  </p>
-                  <p className="countdown-item__label">минут</p>
-                </article>
-
-                <article className="countdown-item">
-                  <p className="countdown-item__value">
-                    {formatTwoDigits(countdown.seconds)}
-                  </p>
-                  <p className="countdown-item__label">секунд</p>
-                </article>
+              <div className="timeline-list">
+                {timelineItems.map((item, index) => (
+                  <article
+                    key={`${item.time}-${item.title}`}
+                    className="timeline-item reveal-on-scroll"
+                    data-reveal
+                    data-reveal-delay={String(90 + index * 75)}
+                  >
+                    <p className="timeline-item__time">{item.time}</p>
+                    <span className="timeline-item__dot" aria-hidden="true" />
+                    <div className="timeline-item__content">
+                      <h3 className="timeline-item__title">{item.title}</h3>
+                      <p className="timeline-item__description">{item.description}</p>
+                    </div>
+                  </article>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          <section
+            ref={timelineSentinelRef}
+            className="inv-section timeline-section lazy-section lazy-section--timeline"
+            aria-hidden="true"
+          >
+            <div className="container">
+              <div className="lazy-section__placeholder" />
+            </div>
+          </section>
+        )}
+
+        {isCountdownVisible ? (
+          <section className="inv-section countdown-section">
+            <div className="container">
+              <header className="section-head">
+                <h2 className="section-title">До свадьбы осталось</h2>
+              </header>
+
+              <CountdownCard />
+            </div>
+          </section>
+        ) : (
+          <section
+            ref={countdownSentinelRef}
+            className="inv-section countdown-section lazy-section lazy-section--countdown"
+            aria-hidden="true"
+          >
+            <div className="container">
+              <div className="lazy-section__placeholder" />
+            </div>
+          </section>
+        )}
 
       </main>
     </div>
@@ -272,3 +713,4 @@ const App = () => {
 }
 
 export default App
+
