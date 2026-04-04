@@ -59,14 +59,12 @@
 @supports (height: 100svh) {
   :root {
     --app-min-height: 100svh;
-    --app-background-height: 100svh;
   }
 }
 
 @supports (height: 100dvh) {
   :root {
     --app-min-height: 100dvh;
-    --app-background-height: 100dvh;
   }
 }
 
@@ -89,7 +87,6 @@
 html,
 body {
   overflow-x: clip;
-  overscroll-behavior-y: none;
 }
 
 html {
@@ -133,7 +130,7 @@ body::before {
       var(--safe-area-bottom) +
       (var(--background-bleed) * 2)
   );
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   background-image: var(--page-background-image);
   background-position: center;
@@ -142,6 +139,8 @@ body::before {
 }
 
 .site-shell {
+  position: relative;
+  z-index: 1;
   min-height: max(var(--app-min-height), var(--ios-full-height));
   padding-left: var(--safe-area-left);
   padding-right: var(--safe-area-right);
