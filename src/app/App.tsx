@@ -8,8 +8,20 @@ const ROAD_SMOOTHING_FACTOR = 0.12
 const VENUE_MAP_LINK = 'https://yandex.ru/maps/-/CPf4aPmn'
 const VENUE_MAP_WIDGET_URL =
   'https://yandex.ru/map-widget/v1/?mode=search&text=%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B0%D0%BB%20%D0%9D%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C,%20%D0%9C%D0%B0%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0,%2011%D0%90&z=17'
+const REGISTRY_OFFICE_MAP_LINK =
+  'https://yandex.ru/maps/?text=%D0%97%D0%90%D0%93%D0%A1%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D0%B8%2C%20%D1%83%D0%BB.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%201%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
+const REGISTRY_OFFICE_IMAGE_SRC = '/images/registry-palace.jpg'
+const CHAPEL_MAP_LINK = 'https://yandex.ru/maps/?text=%D0%A5%D1%80%D0%B0%D0%BC%20%D0%9F%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%BD%D1%8F%2C%20%D0%90%D1%80%D0%B8%D1%81%D1%82%D0%BE%D0%B2%D0%B0%2036%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
+const CHAPEL_IMAGE_SRC = '/images/chapel.jpg'
+const VENUE_IMAGE_SRC = '/images/banket.jpg'
 
 const timelineItems = [
+  {
+    time: '11:30',
+    title: 'Регистрация брака',
+    description:
+      'Регистрация брака во Дворце Бракосочетания.',
+  },
   {
     time: '15:30',
     title: 'Сбор гостей',
@@ -18,9 +30,9 @@ const timelineItems = [
   },
   {
     time: '16:15',
-    title: 'Церемония',
+    title: 'Начало праздника',
     description:
-      'Самый трогательный момент дня. Расположение площадки добавим в этом блоке.',
+      'Теплая встреча на площадке банкета и первые праздничные моменты.',
   },
   {
     time: '17:00',
@@ -302,7 +314,6 @@ const App = () => {
     useLazySectionVisibility('280px 0px')
   const { isVisible: isCountdownVisible, sentinelRef: countdownSentinelRef } =
     useLazySectionVisibility('220px 0px')
-  const [isVenueMapLoaded, setIsVenueMapLoaded] = useState(false)
 
   useEffect(() => {
     const isIOSDevice =
@@ -634,16 +645,13 @@ const App = () => {
         <section className="hero-screen">
           <div className="container">
             <div className="hero-screen__frame">
-              <div className="hero-screen__center">
-                <h1 className="hero-screen__title">
-                  <span>Алексей</span>
-                  <span className="hero-screen__connector">и</span>
-                  <span>Анастасия</span>
-                </h1>
-                <time className="hero-screen__date" dateTime="2026-07-17">
-                  17 июля 2026
-                </time>
-              </div>
+              <img 
+                className="hero-screen__image"
+                src="/images/header.jpg" 
+                alt="Алексей и Анастасия"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           </div>
         </section>
@@ -749,52 +757,142 @@ const App = () => {
           </div>
         </section>
 
+        <section className="inv-section registry-section">
+          <div className="container">
+            <header className="section-head">
+              <h2 className="section-title">Регистрация брака</h2>
+            </header>
+
+            <article
+              className="registry-card reveal-on-scroll"
+              data-reveal
+              data-reveal-delay="100"
+            >
+              <div className="registry-card__time-block">
+                <p className="registry-card__label">Регистрация брака</p>
+                <time className="registry-card__time" dateTime="2026-07-17T11:30:00+03:00">
+                  11:30
+                </time>
+                <p className="registry-card__date">17 июля 2026</p>
+              </div>
+
+              <div className="registry-card__image-wrap">
+                <img
+                  className="registry-card__image"
+                  src={REGISTRY_OFFICE_IMAGE_SRC}
+                  alt="Дворец Бракосочетания в Астрахани на Красной Набережной"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              <div className="registry-card__details">
+                <h3 className="registry-card__title">Дворец Бракосочетания</h3>
+                <p className="registry-card__address">
+                  ул. Красная Набережная, 1, Астрахань
+                </p>
+                <a
+                  className="registry-card__link"
+                  href={REGISTRY_OFFICE_MAP_LINK}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Посмотреть на карте
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section className="inv-section chapel-section">
+          <div className="container">
+            <header className="section-head">
+              <h2 className="section-title">Венчание</h2>
+            </header>
+
+            <article
+              className="registry-card chapel-card reveal-on-scroll"
+              data-reveal
+              data-reveal-delay="100"
+            >
+              <div className="registry-card__time-block">
+                <p className="registry-card__label">Венчание</p>
+                <time className="registry-card__time" dateTime="2026-07-17T13:00:00+03:00">
+                  13:00
+                </time>
+                <p className="registry-card__date">17 июля 2026</p>
+              </div>
+
+              <div className="registry-card__image-wrap">
+                <img
+                  className="registry-card__image"
+                  src={CHAPEL_IMAGE_SRC}
+                  alt="Храм Преображения Господня в Астрахани"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              <div className="registry-card__details">
+                <h3 className="registry-card__title">Храм Преображения Господня</h3>
+                <p className="registry-card__address">
+                  Аристова 36, Астрахань
+                </p>
+                <a
+                  className="registry-card__link"
+                  href={CHAPEL_MAP_LINK}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Посмотреть на карте
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
+
         <section className="inv-section venue-section">
           <div className="container">
             <header className="section-head">
-              <h2 className="section-title">Место проведения</h2>
+              <h2 className="section-title">Банкет</h2>
             </header>
 
-            <article className="venue-card reveal-on-scroll" data-reveal data-reveal-delay="100">
-              <div className="venue-card__details">
-                <p className="venue-card__label">Банкетный зал</p>
-                <h3 className="venue-card__title">«Националь»</h3>
-                <p className="venue-card__address">Магистральная улица, 11А</p>
+            <article
+              className="registry-card reveal-on-scroll"
+              data-reveal
+              data-reveal-delay="100"
+            >
+              <div className="registry-card__time-block">
+                <p className="registry-card__label">Банкет</p>
+                <time className="registry-card__time" dateTime="2026-07-17T17:00:00+03:00">
+                  17:00
+                </time>
+                <p className="registry-card__date">17 июля 2026</p>
+              </div>
+
+              <div className="registry-card__image-wrap">
+                <img
+                  className="registry-card__image"
+                  src={VENUE_IMAGE_SRC}
+                  alt="Банкетный зал «Националь» в Астрахани"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              <div className="registry-card__details">
+                <h3 className="registry-card__title">«Националь»</h3>
+                <p className="registry-card__address">
+                  Магистральная улица, 11А, Астрахань
+                </p>
                 <a
-                  className="venue-card__link"
+                  className="registry-card__link"
                   href={VENUE_MAP_LINK}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Открыть в Яндекс Картах
+                  Посмотреть на карте
                 </a>
-              </div>
-
-              <div className="venue-card__map-wrap">
-                {isVenueMapLoaded ? (
-                  <>
-                    <iframe
-                      className="venue-card__map"
-                      title="Карта: банкетный зал «Националь»"
-                      src={VENUE_MAP_WIDGET_URL}
-                      loading="lazy"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                    />
-                    <span className="venue-card__map-glass" aria-hidden="true" />
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    className="venue-card__map-placeholder"
-                    onClick={() => setIsVenueMapLoaded(true)}
-                    aria-label="Загрузить карту Яндекс"
-                  >
-                    <span className="venue-card__map-placeholder-title">Открыть карту</span>
-                    <span className="venue-card__map-placeholder-text">
-                      Загрузим карту после нажатия, чтобы сайт работал стабильнее.
-                    </span>
-                  </button>
-                )}
               </div>
             </article>
           </div>
