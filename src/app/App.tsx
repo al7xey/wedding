@@ -6,8 +6,6 @@ const ROAD_PROGRESS_START = 0.16
 const ROAD_PROGRESS_END = 1.2
 const ROAD_SMOOTHING_FACTOR = 0.12
 const VENUE_MAP_LINK = 'https://yandex.ru/maps/-/CPf4aPmn'
-const VENUE_MAP_WIDGET_URL =
-  'https://yandex.ru/map-widget/v1/?mode=search&text=%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B0%D0%BB%20%D0%9D%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C,%20%D0%9C%D0%B0%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0,%2011%D0%90&z=17'
 const REGISTRY_OFFICE_MAP_LINK =
   'https://yandex.ru/maps/?text=%D0%97%D0%90%D0%93%D0%A1%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D0%B8%2C%20%D1%83%D0%BB.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%201%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
 const REGISTRY_OFFICE_IMAGE_SRC = '/images/registry-palace.jpg'
@@ -18,36 +16,26 @@ const VENUE_IMAGE_SRC = '/images/banket.jpg'
 const timelineItems = [
   {
     time: '11:30',
-    title: 'Регистрация брака',
+    title: 'Торжественная регистрация брака',
     description:
-      'Регистрация брака во Дворце Бракосочетания.',
+      'Торжественная регистрация брака во Дворце Бракосочетания.',
   },
   {
-    time: '15:30',
-    title: 'Сбор гостей',
+    time: '14:00',
+    title: 'Венчание',
     description:
-      'Welcome-зона и первые тосты. Точные детали появятся ближе к дате.',
+      'Таинство венчания в Храме Преображения Господня.',
   },
   {
-    time: '16:15',
-    title: 'Начало праздника',
+    time: '17:30',
+    title: 'Сбор гостей в банкетом зале',
     description:
-      'Теплая встреча на площадке банкета и первые праздничные моменты.',
-  },
-  {
-    time: '17:00',
-    title: 'Фотосессия и аперитив',
-    description: 'Время для живых кадров, музыки и легкого общения.',
+      'Сбор гостей в банкетном зале и ожидание начала праздника.',
   },
   {
     time: '18:00',
-    title: 'Праздничный ужин',
-    description: 'Теплая атмосфера, речь близких и первые танцы.',
-  },
-  {
-    time: '21:30',
-    title: 'Вечерняя программа',
-    description: 'Финальная часть праздника. Подробности сценария скоро.',
+    title: 'Начало банкета',
+    description: 'Начало банкета и праздничного вечера.',
   },
 ] as const
 
@@ -120,6 +108,15 @@ const JULY_2026_CALENDAR_CELLS: ReadonlyArray<number | null> = [
   ...Array.from({ length: JULY_2026_WEEK_START_OFFSET }, () => null),
   ...Array.from({ length: JULY_2026_DAYS_IN_MONTH }, (_, index) => index + 1),
 ]
+const GOOGLE_CALENDAR_LINK = `https://calendar.google.com/calendar/render?${new URLSearchParams({
+  action: 'TEMPLATE',
+  text: 'Свадьба Алексея и Анастасии',
+  dates: '20260717T083000Z/20260717T190000Z',
+  ctz: 'Europe/Moscow',
+  location: 'Астрахань',
+  details:
+    'Свадебный день Алексея и Анастасии. Регистрация: 11:30, венчание: 14:00, банкет: 17:30.',
+}).toString()}`
 
 const buildSmoothStoryPath = (points: readonly StoryPathPoint[]) => {
   if (points.length < 2) {
@@ -177,9 +174,12 @@ const WeddingCalendarCard = () => {
     >
       <div className="wedding-calendar__top">
         <p className="wedding-calendar__month">Июль 2026</p>
-        <time className="wedding-calendar__date" dateTime="2026-07-17">
-          17 июля
-        </time>
+        <div className="wedding-calendar__date-block">
+          <time className="wedding-calendar__date" dateTime="2026-07-17">
+            17 июля
+          </time>
+          <p className="wedding-calendar__date-weekday">пятница</p>
+        </div>
       </div>
 
       <div className="wedding-calendar__grid" role="grid" aria-label="Календарь июля 2026">
@@ -189,17 +189,30 @@ const WeddingCalendarCard = () => {
           </span>
         ))}
 
-        {JULY_2026_CALENDAR_CELLS.map((day, index) =>
-          day === null ? (
-            <span
-              key={`empty-${index}`}
-              className="wedding-calendar__day wedding-calendar__day--empty"
-              aria-hidden="true"
-            />
-          ) : (
+        {JULY_2026_CALENDAR_CELLS.map((day, index) => {
+          const weekdayIndex = index % CALENDAR_WEEKDAYS.length
+          const isWeekend = weekdayIndex >= 5
+
+          if (day === null) {
+            return (
+              <span
+                key={`empty-${index}`}
+                className="wedding-calendar__day wedding-calendar__day--empty"
+                aria-hidden="true"
+              />
+            )
+          }
+
+          return (
             <time
               key={day}
-              className={`wedding-calendar__day${day === WEDDING_DAY_OF_MONTH ? ' wedding-calendar__day--wedding' : ''}`}
+              className={[
+                'wedding-calendar__day',
+                isWeekend ? 'wedding-calendar__day--weekend' : '',
+                day === WEDDING_DAY_OF_MONTH ? 'wedding-calendar__day--wedding' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
               dateTime={`2026-07-${formatTwoDigits(day)}`}
               aria-label={
                 day === WEDDING_DAY_OF_MONTH
@@ -207,13 +220,23 @@ const WeddingCalendarCard = () => {
                   : `${day} июля 2026`
               }
             >
-              {day}
+              <span className="wedding-calendar__day-number">{day}</span>
             </time>
-          ),
-        )}
+          )
+        })}
       </div>
 
-      <p className="wedding-calendar__note">Пятница, 17 июля 2026</p>
+      <div className="wedding-calendar__footer">
+        <p className="wedding-calendar__note">Пятница, 17 июля 2026</p>
+        <a
+          className="wedding-calendar__action"
+          href={GOOGLE_CALENDAR_LINK}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Записать в календарь
+        </a>
+      </div>
     </article>
   )
 }
@@ -817,8 +840,8 @@ const App = () => {
             >
               <div className="registry-card__time-block">
                 <p className="registry-card__label">Венчание</p>
-                <time className="registry-card__time" dateTime="2026-07-17T13:00:00+03:00">
-                  13:00
+                <time className="registry-card__time" dateTime="2026-07-17T14:00:00+03:00">
+                  14:00
                 </time>
                 <p className="registry-card__date">17 июля 2026</p>
               </div>
@@ -864,8 +887,8 @@ const App = () => {
             >
               <div className="registry-card__time-block">
                 <p className="registry-card__label">Банкет</p>
-                <time className="registry-card__time" dateTime="2026-07-17T17:00:00+03:00">
-                  17:00
+                <time className="registry-card__time" dateTime="2026-07-17T17:30:00+03:00">
+                  17:30
                 </time>
                 <p className="registry-card__date">17 июля 2026</p>
               </div>
