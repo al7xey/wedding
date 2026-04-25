@@ -101,13 +101,8 @@ const STORY_PATH_POINTS: readonly StoryPathPoint[] = [
 
 const STORY_PATH_SMOOTHNESS = 1
 const CALENDAR_WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as const
-const JULY_2026_DAYS_IN_MONTH = 31
-const JULY_2026_WEEK_START_OFFSET = 2
 const WEDDING_DAY_OF_MONTH = 17
-const JULY_2026_CALENDAR_CELLS: ReadonlyArray<number | null> = [
-  ...Array.from({ length: JULY_2026_WEEK_START_OFFSET }, () => null),
-  ...Array.from({ length: JULY_2026_DAYS_IN_MONTH }, (_, index) => index + 1),
-]
+const WEDDING_WEEK_CALENDAR_DAYS = [13, 14, 15, 16, 17, 18, 19] as const
 const GOOGLE_CALENDAR_LINK = `https://calendar.google.com/calendar/render?${new URLSearchParams({
   action: 'TEMPLATE',
   text: 'Свадьба Алексея и Анастасии',
@@ -182,48 +177,32 @@ const WeddingCalendarCard = () => {
         </div>
       </div>
 
-      <div className="wedding-calendar__grid" role="grid" aria-label="Календарь июля 2026">
+      <div className="wedding-calendar__week" role="grid" aria-label="Неделя свадьбы">
         {CALENDAR_WEEKDAYS.map((weekDay) => (
           <span key={weekDay} className="wedding-calendar__weekday" aria-hidden="true">
             {weekDay}
           </span>
         ))}
 
-        {JULY_2026_CALENDAR_CELLS.map((day, index) => {
-          const weekdayIndex = index % CALENDAR_WEEKDAYS.length
-          const isWeekend = weekdayIndex >= 5
-
-          if (day === null) {
-            return (
-              <span
-                key={`empty-${index}`}
-                className="wedding-calendar__day wedding-calendar__day--empty"
-                aria-hidden="true"
-              />
-            )
-          }
-
-          return (
-            <time
-              key={day}
-              className={[
-                'wedding-calendar__day',
-                isWeekend ? 'wedding-calendar__day--weekend' : '',
-                day === WEDDING_DAY_OF_MONTH ? 'wedding-calendar__day--wedding' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              dateTime={`2026-07-${formatTwoDigits(day)}`}
-              aria-label={
-                day === WEDDING_DAY_OF_MONTH
-                  ? '17 июля 2026 — день свадьбы'
-                  : `${day} июля 2026`
-              }
-            >
-              <span className="wedding-calendar__day-number">{day}</span>
-            </time>
-          )
-        })}
+        {WEDDING_WEEK_CALENDAR_DAYS.map((day) => (
+          <time
+            key={day}
+            className={[
+              'wedding-calendar__day',
+              day === WEDDING_DAY_OF_MONTH ? 'wedding-calendar__day--wedding' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            dateTime={`2026-07-${formatTwoDigits(day)}`}
+            aria-label={
+              day === WEDDING_DAY_OF_MONTH
+                ? '17 июля 2026 — день свадьбы'
+                : `${day} июля 2026`
+            }
+          >
+            <span className="wedding-calendar__day-number">{formatTwoDigits(day)}</span>
+          </time>
+        ))}
       </div>
 
       <div className="wedding-calendar__footer">
@@ -668,13 +647,23 @@ const App = () => {
         <section className="hero-screen">
           <div className="container">
             <div className="hero-screen__frame">
-              <img 
-                className="hero-screen__image"
-                src="/images/header.jpg" 
-                alt="Алексей и Анастасия"
-                loading="lazy"
-                decoding="async"
-              />
+              <div className="hero-screen__center">
+                <h1 className="hero-screen__title" aria-label="Алексей и Анастасия">
+                  <span>Алексей</span>
+                  <span className="hero-screen__connector">и</span>
+                  <span>Анастасия</span>
+                </h1>
+
+                <div className="hero-screen__divider" aria-hidden="true">
+                  <span className="hero-screen__divider-line" />
+                  <span className="hero-screen__divider-heart">♥</span>
+                  <span className="hero-screen__divider-line" />
+                </div>
+
+                <time className="hero-screen__date" dateTime="2026-07-17">
+                  17 июля 2026
+                </time>
+              </div>
             </div>
           </div>
         </section>
