@@ -1,7 +1,5 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 
-import type { MouseEvent } from 'react'
-
 const COUNTDOWN_STEP_MS = 1000
 const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
 const ROAD_PROGRESS_START = 0.16
@@ -115,10 +113,6 @@ const GOOGLE_CALENDAR_EVENT_PARAMS = new URLSearchParams({
     'Свадебный день Алексея и Анастасии. Регистрация: 11:30, венчание: 14:00, банкет: 17:30.',
 }).toString()
 const GOOGLE_CALENDAR_LINK = `https://calendar.google.com/calendar/render?${GOOGLE_CALENDAR_EVENT_PARAMS}`
-const GOOGLE_CALENDAR_IOS_APP_LINK = `comgooglecalendar://calendar.google.com/calendar/render?${GOOGLE_CALENDAR_EVENT_PARAMS}`
-const GOOGLE_CALENDAR_ANDROID_APP_LINK = `intent://calendar.google.com/calendar/render?${GOOGLE_CALENDAR_EVENT_PARAMS}#Intent;scheme=https;package=com.google.android.calendar;S.browser_fallback_url=${encodeURIComponent(
-  GOOGLE_CALENDAR_LINK,
-)};end`
 
 const buildSmoothStoryPath = (points: readonly StoryPathPoint[]) => {
   if (points.length < 2) {
@@ -169,30 +163,8 @@ const prefersReducedMotion = () =>
 const isIOSDevice = () =>
   /iP(hone|ad|od)/.test(window.navigator.userAgent) ||
   (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1)
-const isAndroidDevice = () => /Android/i.test(window.navigator.userAgent)
-const isMobileDevice = () => isIOSDevice() || isAndroidDevice()
 
 const WeddingCalendarCard = () => {
-  const handleCalendarClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (!isMobileDevice()) {
-      return
-    }
-
-    event.preventDefault()
-
-    const appLink = isAndroidDevice()
-      ? GOOGLE_CALENDAR_ANDROID_APP_LINK
-      : GOOGLE_CALENDAR_IOS_APP_LINK
-
-    window.location.href = appLink
-
-    window.setTimeout(() => {
-      if (document.visibilityState === 'visible') {
-        window.location.href = GOOGLE_CALENDAR_LINK
-      }
-    }, 900)
-  }
-
   return (
     <article
       className="wedding-calendar reveal-on-scroll"
@@ -242,7 +214,6 @@ const WeddingCalendarCard = () => {
         <a
           className="wedding-calendar__action"
           href={GOOGLE_CALENDAR_LINK}
-          onClick={handleCalendarClick}
           target="_blank"
           rel="noreferrer"
         >
