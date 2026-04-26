@@ -1,5 +1,7 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 
+import type { MouseEvent } from 'react'
+
 const COUNTDOWN_STEP_MS = 1000
 const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
 const ROAD_PROGRESS_START = 0.16
@@ -16,7 +18,7 @@ const VENUE_IMAGE_SRC = '/images/banket.jpg'
 const timelineItems = [
   {
     time: '11:30',
-    title: 'Торжественная регистрация брака',
+    title: 'Регистрация брака',
     description:
       'Торжественная регистрация брака во Дворце Бракосочетания.',
   },
@@ -30,11 +32,11 @@ const timelineItems = [
     time: '17:30',
     title: 'Сбор гостей в банкетом зале',
     description:
-      'Сбор гостей в банкетном зале и ожидание начала праздника.',
+      'Сбор гостей и ожидание начала праздника.',
   },
   {
     time: '18:00',
-    title: 'Начало банкета',
+    title: 'Банкет',
     description: 'Начало банкета и праздничного вечера.',
   },
 ] as const
@@ -103,7 +105,7 @@ const STORY_PATH_SMOOTHNESS = 1
 const CALENDAR_WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as const
 const WEDDING_DAY_OF_MONTH = 17
 const WEDDING_WEEK_CALENDAR_DAYS = [13, 14, 15, 16, 17, 18, 19] as const
-const GOOGLE_CALENDAR_LINK = `https://calendar.google.com/calendar/render?${new URLSearchParams({
+const GOOGLE_CALENDAR_EVENT_PARAMS = new URLSearchParams({
   action: 'TEMPLATE',
   text: 'Свадьба Алексея и Анастасии',
   dates: '20260717T083000Z/20260717T190000Z',
@@ -111,7 +113,12 @@ const GOOGLE_CALENDAR_LINK = `https://calendar.google.com/calendar/render?${new 
   location: 'Астрахань',
   details:
     'Свадебный день Алексея и Анастасии. Регистрация: 11:30, венчание: 14:00, банкет: 17:30.',
-}).toString()}`
+}).toString()
+const GOOGLE_CALENDAR_LINK = `https://calendar.google.com/calendar/render?${GOOGLE_CALENDAR_EVENT_PARAMS}`
+const GOOGLE_CALENDAR_IOS_APP_LINK = `comgooglecalendar://calendar.google.com/calendar/render?${GOOGLE_CALENDAR_EVENT_PARAMS}`
+const GOOGLE_CALENDAR_ANDROID_APP_LINK = `intent://calendar.google.com/calendar/render?${GOOGLE_CALENDAR_EVENT_PARAMS}#Intent;scheme=https;package=com.google.android.calendar;S.browser_fallback_url=${encodeURIComponent(
+  GOOGLE_CALENDAR_LINK,
+)};end`
 
 const buildSmoothStoryPath = (points: readonly StoryPathPoint[]) => {
   if (points.length < 2) {
@@ -159,8 +166,33 @@ const formatTwoDigits = (value: number) => String(value).padStart(2, '0')
 const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const isIOSDevice = () =>
+  /iP(hone|ad|od)/.test(window.navigator.userAgent) ||
+  (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1)
+const isAndroidDevice = () => /Android/i.test(window.navigator.userAgent)
+const isMobileDevice = () => isIOSDevice() || isAndroidDevice()
 
 const WeddingCalendarCard = () => {
+  const handleCalendarClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!isMobileDevice()) {
+      return
+    }
+
+    event.preventDefault()
+
+    const appLink = isAndroidDevice()
+      ? GOOGLE_CALENDAR_ANDROID_APP_LINK
+      : GOOGLE_CALENDAR_IOS_APP_LINK
+
+    window.location.href = appLink
+
+    window.setTimeout(() => {
+      if (document.visibilityState === 'visible') {
+        window.location.href = GOOGLE_CALENDAR_LINK
+      }
+    }, 900)
+  }
+
   return (
     <article
       className="wedding-calendar reveal-on-scroll"
@@ -210,6 +242,7 @@ const WeddingCalendarCard = () => {
         <a
           className="wedding-calendar__action"
           href={GOOGLE_CALENDAR_LINK}
+          onClick={handleCalendarClick}
           target="_blank"
           rel="noreferrer"
         >
@@ -318,12 +351,7 @@ const App = () => {
     useLazySectionVisibility('220px 0px')
 
   useEffect(() => {
-    const isIOSDevice =
-      /iP(hone|ad|od)/.test(window.navigator.userAgent) ||
-      (window.navigator.platform === 'MacIntel' &&
-        window.navigator.maxTouchPoints > 1)
-
-    if (!isIOSDevice) {
+    if (!isIOSDevice()) {
       return
     }
 
@@ -331,7 +359,7 @@ const App = () => {
 
     const syncIOSViewportHeight = () => {
       const visualHeight = window.visualViewport?.height ?? 0
-      const viewportHeight = Math.max(window.innerHeight, visualHeight)
+      const viewportHeight = visualHeight > 0 ? visualHeight : window.innerHeight
       root.style.setProperty('--ios-full-height', `${Math.round(viewportHeight)}px`)
     }
 
@@ -656,7 +684,7 @@ const App = () => {
 
                 <div className="hero-screen__divider" aria-hidden="true">
                   <span className="hero-screen__divider-line" />
-                  <span className="hero-screen__divider-heart">♥</span>
+                  <span className="hero-screen__divider-heart">♥︎</span>
                   <span className="hero-screen__divider-line" />
                 </div>
 
@@ -680,12 +708,7 @@ const App = () => {
               data-reveal-delay="80"
             >
               <p className="lead-text">
-                Дорогие родные и близкие, приглашаем вас на один из
-                самых важных и счастливых дней нашей жизни. Ваше
-                присутствие сделает этот праздник по-настоящему тёплым
-                и незабываемым для нас. Нам очень важно, чтобы именно
-                в этот день рядом были те, кто дорог нашему сердцу.
-                Разделите с нами радость рождения новой семьи!
+                Дорогие родные и близкие! По великому милосердию Господь однажды свёл нас вместе, и совсем скоро Он соединит наши жизни в одну - навсегда. Приглашаем вас разделить с нами этот праздник Любви - день нашей свадьбы!
               </p>
             </article>
           </div>
@@ -735,12 +758,8 @@ const App = () => {
                   <div className="story-photo__image-wrap">
                     <img
                       className="story-photo__image"
-                      src={photo.imageSrc ?? '/images/wedding-bg-mobile.jpg'}
-                      srcSet={
-                        photo.imageSrc
-                          ? `${photo.imageSrc} 1024w`
-                          : '/images/wedding-bg-mobile.jpg 640w, /images/wedding-bg.jpg 1024w'
-                      }
+                      src={photo.imageSrc}
+                      srcSet={`${photo.imageSrc} 1024w`}
                       sizes="(max-width: 640px) 35vw, (max-width: 980px) 28vw, 286px"
                       alt={photo.alt}
                       loading="lazy"
@@ -848,7 +867,7 @@ const App = () => {
               <div className="registry-card__details">
                 <h3 className="registry-card__title">Храм Преображения Господня</h3>
                 <p className="registry-card__address">
-                  Аристова 36, Астрахань
+                  ул. Аристова, 36, Астрахань
                 </p>
                 <a
                   className="registry-card__link"

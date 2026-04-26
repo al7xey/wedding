@@ -148,9 +148,8 @@
 
 :root {
   --font-body: 'Onest Local', 'Segoe UI', sans-serif;
-  --font-timeline-title: 'Forum Local', 'Times New Roman', serif;
-  --font-serif: 'Great Vibes Local', 'Times New Roman', serif;
-  --font-script: 'Great Vibes Local', 'Times New Roman', serif;
+  --font-serif: 'Forum Local', 'Times New Roman', serif;
+  --font-display: 'Great Vibes Local', 'Times New Roman', serif;
 
   --radius-xl: 44px;
   --radius-lg: 32px;
