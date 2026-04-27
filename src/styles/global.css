@@ -1,21 +1,21 @@
 :root {
   --color-text: #46363a;
-  --color-accent: #9d2638;
-  --color-accent-deep: #741b2b;
-  --color-accent-rgb: 157, 38, 56;
-  --color-accent-deep-rgb: 116, 27, 43;
-  --color-dot: #8f2234;
-  --color-dot-soft: rgba(157, 38, 56, 0.24);
-  --color-line: rgba(116, 27, 43, 0.46);
+  --color-accent: #b31234;
+  --color-accent-deep: #72061f;
+  --color-accent-rgb: 179, 18, 52;
+  --color-accent-deep-rgb: 114, 6, 31;
+  --color-dot: #a50f2f;
+  --color-dot-soft: rgba(179, 18, 52, 0.24);
+  --color-line: rgba(114, 6, 31, 0.48);
   --glass-bg: rgba(255, 250, 246, 0.42);
   --glass-panel-bg: rgba(255, 250, 246, 0.76);
   --story-text-bg: rgba(255, 250, 246, 0.86);
   --glass-bg-soft: var(--glass-bg);
 
-  --shadow-md: 0 18px 52px rgba(116, 27, 43, 0.09);
-  --shadow-sm: 0 14px 38px rgba(116, 27, 43, 0.08);
+  --shadow-md: 0 18px 52px rgba(114, 6, 31, 0.1);
+  --shadow-sm: 0 14px 38px rgba(114, 6, 31, 0.09);
 
-  --inset-border: 0 0 0 1px rgba(116, 27, 43, 0.07);
+  --inset-border: 0 0 0 1px rgba(114, 6, 31, 0.08);
 
   --container-width: 1080px;
   --container-gutter: 2.4rem;
@@ -507,7 +507,7 @@ body::before {
 
 .registry-card__link:hover,
 .registry-card__link:focus-visible {
-  background: linear-gradient(160deg, #b73448 0%, var(--color-accent-deep) 100%);
+  background: linear-gradient(160deg, #c2183d 0%, var(--color-accent-deep) 100%);
   box-shadow: 0 12px 22px rgba(var(--color-accent-deep-rgb), 0.26);
 }
 
@@ -786,7 +786,7 @@ body::before {
 
 .wedding-calendar__action:hover,
 .wedding-calendar__action:focus-visible {
-  background: linear-gradient(160deg, #b73448 0%, var(--color-accent-deep) 100%);
+  background: linear-gradient(160deg, #c2183d 0%, var(--color-accent-deep) 100%);
   box-shadow: 0 12px 22px rgba(var(--color-accent-deep-rgb), 0.26);
 }
 

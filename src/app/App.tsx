@@ -70,7 +70,7 @@ const storyPhotos = [
   },
   {
     year: 'Июль 2025',
-    title: 'Да!',
+    title: 'Она сказала «Да!»',
     text: 'Незабываемое предложение руки и сердца в Москва-Сити',
     alt: 'Предложение',
     imageSrc: '/images/story-5.jpg',
