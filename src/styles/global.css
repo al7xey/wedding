@@ -140,26 +140,8 @@ body::before {
   position: fixed;
   top: calc((-1 * var(--safe-area-top)) - var(--background-bleed));
   right: calc((-1 * var(--safe-area-right)) - var(--background-bleed));
-  left: calc((-1 * var(--safe-area-left)) - var(--background-bleed));
-  height: calc(var(--app-background-height) + var(--safe-area-top) + var(--safe-area-bottom) + (var(--background-bleed) * 2));
-  z-index: 0;
-  pointer-events: none;
-  background-color: var(--page-background-color);
-  background-image: var(--page-background-image);
-  background-position: left top, center, center;
-  background-repeat: no-repeat;
-  background-size: var(--page-background-size);
-  background-attachment: fixed;
-  transform: translateZ(0);
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  right: calc((-1 * var(--safe-area-right)) - var(--background-bleed));
   bottom: calc((-1 * var(--safe-area-bottom)) - var(--background-bleed));
   left: calc((-1 * var(--safe-area-left)) - var(--background-bleed));
-  height: calc(190px + var(--safe-area-bottom) + var(--background-bleed));
   z-index: 0;
   pointer-events: none;
   background-color: var(--page-background-color);
