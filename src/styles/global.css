@@ -45,16 +45,16 @@
   --safe-area-left: 0px;
   --safe-area-left: env(safe-area-inset-left);
 
-  --ios-full-height: 100vh;
-  --app-min-height: 100vh;
-  --app-background-height: 100vh;
-  --background-bleed: 24px;
+  --ios-full-height: 100svh;
+  --app-min-height: 100svh;
+  --app-background-height: 100lvh;
   --page-background-color: #ffe4e5;
   --page-background-image:
     radial-gradient(ellipse at 0% 0%, rgba(var(--color-gold-rgb), 0.38) 0%, rgba(var(--color-gold-rgb), 0.22) 16%, rgba(var(--color-gold-rgb), 0) 42%),
     radial-gradient(circle at 92% 88%, rgba(var(--color-accent-deep-rgb), 0.2) 0%, rgba(var(--color-accent-deep-rgb), 0) 34%),
     linear-gradient(145deg, #ffe7e7 0%, #ffe4e5 38%, #f5bdc6 72%, #eec7c0 100%);
-  --page-background-size: 100% 100%, 100% 100%, 100% 100%;
+  --page-background-position: left top, center, center;
+  --page-background-size: cover;
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -104,33 +104,28 @@ body {
   overflow-x: clip;
 }
 
-html {
+html,
+body,
+#root {
   min-height: 100%;
   min-height: var(--app-min-height);
   background-color: var(--page-background-color);
   background-image: var(--page-background-image);
-  background-position: left top, center, center;
+  background-position: var(--page-background-position);
   background-repeat: no-repeat;
   background-size: var(--page-background-size);
-  background-attachment: fixed;
 }
 
 body {
-  min-height: 100%;
-  min-height: var(--app-min-height);
   margin: 0;
   font-family: var(--font-body);
   font-weight: 500;
   color: var(--color-text);
-  background-color: transparent;
   position: relative;
   isolation: isolate;
 }
 
 #root {
-  min-height: 100%;
-  min-height: var(--app-min-height);
-  background-color: transparent;
   position: relative;
   isolation: isolate;
 }
@@ -138,18 +133,16 @@ body {
 body::before {
   content: '';
   position: fixed;
-  top: calc((-1 * var(--safe-area-top)) - var(--background-bleed));
-  right: calc((-1 * var(--safe-area-right)) - var(--background-bleed));
-  bottom: calc((-1 * var(--safe-area-bottom)) - var(--background-bleed));
-  left: calc((-1 * var(--safe-area-left)) - var(--background-bleed));
-  z-index: 0;
+  inset: 0;
+  min-height: 100%;
+  min-height: var(--app-background-height);
+  z-index: -1;
   pointer-events: none;
   background-color: var(--page-background-color);
   background-image: var(--page-background-image);
-  background-position: left top, center, center;
+  background-position: var(--page-background-position);
   background-repeat: no-repeat;
   background-size: var(--page-background-size);
-  background-attachment: fixed;
   transform: translateZ(0);
 }
 
@@ -167,10 +160,10 @@ body::before {
 }
 
 .invitation-main {
-  padding:
-    calc(clamp(1.2rem, 2.6vw, 2.2rem) + var(--safe-area-top))
-    0
-    calc(clamp(2rem, 5vw, 4rem) + var(--safe-area-bottom));
+  padding-top: calc(clamp(1.2rem, 2.6vw, 2.2rem) + var(--safe-area-top));
+  padding-right: 0;
+  padding-bottom: max(24px, calc(clamp(2rem, 5vw, 4rem) + var(--safe-area-bottom)));
+  padding-left: 0;
 }
 
 .hero-screen__frame,
@@ -1014,10 +1007,8 @@ body::before {
   }
 
   .invitation-main {
-    padding:
-      calc((var(--container-gutter-mobile) / 2) + var(--safe-area-top))
-      0
-      calc(2.6rem + var(--safe-area-bottom));
+    padding-top: calc((var(--container-gutter-mobile) / 2) + var(--safe-area-top));
+    padding-bottom: max(24px, calc(2.6rem + var(--safe-area-bottom)));
   }
 
   .hero-screen {
@@ -1272,10 +1263,8 @@ body::before {
   }
 
   .invitation-main {
-    padding:
-      calc((var(--container-gutter-xs) / 2) + var(--safe-area-top))
-      0
-      calc(2.4rem + var(--safe-area-bottom));
+    padding-top: calc((var(--container-gutter-xs) / 2) + var(--safe-area-top));
+    padding-bottom: max(24px, calc(2.4rem + var(--safe-area-bottom)));
   }
 
   .hero-screen__frame {
