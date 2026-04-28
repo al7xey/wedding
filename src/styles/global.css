@@ -103,10 +103,6 @@ html {
   min-height: 100%;
   min-height: var(--app-min-height);
   background-color: var(--page-background-color);
-  background-image: var(--page-background-image);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: var(--page-background-size);
 }
 
 body {
@@ -136,7 +132,6 @@ body::before {
   right: calc((-1 * var(--safe-area-right)) - var(--background-bleed));
   bottom: calc((-1 * var(--safe-area-bottom)) - var(--background-bleed));
   left: calc((-1 * var(--safe-area-left)) - var(--background-bleed));
-  min-height: calc(var(--app-background-height) + var(--safe-area-top) + var(--safe-area-bottom));
   z-index: 0;
   pointer-events: none;
   background-color: var(--page-background-color);

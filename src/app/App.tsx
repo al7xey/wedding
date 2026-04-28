@@ -9,9 +9,17 @@ const VENUE_MAP_LINK = 'https://yandex.ru/maps/-/CPf4aPmn'
 const REGISTRY_OFFICE_MAP_LINK =
   'https://yandex.ru/maps/?text=%D0%97%D0%90%D0%93%D0%A1%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D0%B8%2C%20%D1%83%D0%BB.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%201%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
 const REGISTRY_OFFICE_IMAGE_SRC = '/images/registry-palace.webp'
+const REGISTRY_OFFICE_IMAGE_SRC_SET =
+  '/images/registry-palace-480.webp 480w, /images/registry-palace-768.webp 768w, /images/registry-palace-1024.webp 1024w'
 const CHAPEL_MAP_LINK = 'https://yandex.ru/maps/?text=%D0%A5%D1%80%D0%B0%D0%BC%20%D0%9F%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%BD%D1%8F%2C%20%D0%90%D1%80%D0%B8%D1%81%D1%82%D0%BE%D0%B2%D0%B0%2036%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
 const CHAPEL_IMAGE_SRC = '/images/chapel.webp'
+const CHAPEL_IMAGE_SRC_SET =
+  '/images/chapel-480.webp 480w, /images/chapel-768.webp 768w, /images/chapel-1024.webp 1024w'
 const VENUE_IMAGE_SRC = '/images/banket.webp'
+const VENUE_IMAGE_SRC_SET =
+  '/images/banket-480.webp 480w, /images/banket-768.webp 768w, /images/banket-1024.webp 1024w'
+const LOCATION_IMAGE_SIZES =
+  '(max-width: 640px) calc(100vw - 2.5rem), (max-width: 980px) 58vw, 720px'
 
 const timelineItems = [
   {
@@ -782,6 +790,8 @@ const App = () => {
                 <img
                   className="registry-card__image"
                   src={REGISTRY_OFFICE_IMAGE_SRC}
+                  srcSet={REGISTRY_OFFICE_IMAGE_SRC_SET}
+                  sizes={LOCATION_IMAGE_SIZES}
                   alt="Дворец Бракосочетания в Астрахани на Красной Набережной"
                   loading="lazy"
                   decoding="async"
@@ -829,6 +839,8 @@ const App = () => {
                 <img
                   className="registry-card__image"
                   src={CHAPEL_IMAGE_SRC}
+                  srcSet={CHAPEL_IMAGE_SRC_SET}
+                  sizes={LOCATION_IMAGE_SIZES}
                   alt="Храм Преображения Господня в Астрахани"
                   loading="lazy"
                   decoding="async"
@@ -876,6 +888,8 @@ const App = () => {
                 <img
                   className="registry-card__image"
                   src={VENUE_IMAGE_SRC}
+                  srcSet={VENUE_IMAGE_SRC_SET}
+                  sizes={LOCATION_IMAGE_SIZES}
                   alt="Банкетный зал «Националь» в Астрахани"
                   loading="lazy"
                   decoding="async"
