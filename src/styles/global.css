@@ -108,6 +108,11 @@ html {
   min-height: 100%;
   min-height: var(--app-min-height);
   background-color: var(--page-background-color);
+  background-image: var(--page-background-image);
+  background-position: left top, center, center;
+  background-repeat: no-repeat;
+  background-size: var(--page-background-size);
+  background-attachment: fixed;
 }
 
 body {
@@ -117,7 +122,7 @@ body {
   font-family: var(--font-body);
   font-weight: 500;
   color: var(--color-text);
-  background-color: var(--page-background-color);
+  background-color: transparent;
   position: relative;
   isolation: isolate;
 }
@@ -144,6 +149,25 @@ body::before {
   background-position: left top, center, center;
   background-repeat: no-repeat;
   background-size: var(--page-background-size);
+  background-attachment: fixed;
+  transform: translateZ(0);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  right: calc((-1 * var(--safe-area-right)) - var(--background-bleed));
+  bottom: calc((-1 * var(--safe-area-bottom)) - var(--background-bleed));
+  left: calc((-1 * var(--safe-area-left)) - var(--background-bleed));
+  height: calc(190px + var(--safe-area-bottom) + var(--background-bleed));
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--page-background-color);
+  background-image: var(--page-background-image);
+  background-position: left top, center, center;
+  background-repeat: no-repeat;
+  background-size: var(--page-background-size);
+  background-attachment: fixed;
   transform: translateZ(0);
 }
 
