@@ -8,10 +8,10 @@ const ROAD_SMOOTHING_FACTOR = 0.12
 const VENUE_MAP_LINK = 'https://yandex.ru/maps/-/CPf4aPmn'
 const REGISTRY_OFFICE_MAP_LINK =
   'https://yandex.ru/maps/?text=%D0%97%D0%90%D0%93%D0%A1%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D0%B8%2C%20%D1%83%D0%BB.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%201%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
-const REGISTRY_OFFICE_IMAGE_SRC = '/images/registry-palace.jpg'
+const REGISTRY_OFFICE_IMAGE_SRC = '/images/registry-palace.webp'
 const CHAPEL_MAP_LINK = 'https://yandex.ru/maps/?text=%D0%A5%D1%80%D0%B0%D0%BC%20%D0%9F%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%BD%D1%8F%2C%20%D0%90%D1%80%D0%B8%D1%81%D1%82%D0%BE%D0%B2%D0%B0%2036%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
-const CHAPEL_IMAGE_SRC = '/images/chapel.jpg'
-const VENUE_IMAGE_SRC = '/images/banket.jpg'
+const CHAPEL_IMAGE_SRC = '/images/chapel.webp'
+const VENUE_IMAGE_SRC = '/images/banket.webp'
 
 const timelineItems = [
   {

@@ -4,6 +4,8 @@
   --color-accent-deep: #72061f;
   --color-accent-rgb: 179, 18, 52;
   --color-accent-deep-rgb: 114, 6, 31;
+  --color-gold: #d5a84f;
+  --color-gold-rgb: 213, 168, 79;
   --color-dot: #a50f2f;
   --color-dot-soft: rgba(179, 18, 52, 0.24);
   --color-line: rgba(114, 6, 31, 0.48);
@@ -48,8 +50,12 @@
   --app-background-height: 100vh;
   --background-bleed: 24px;
   --page-background-color: #ffe4e5;
-  --page-background-image: linear-gradient(180deg, #ffe4e5 0%, #ffe4e5 100%);
-  --page-background-size: 100% 100%;
+  --page-background-image:
+    radial-gradient(circle at 18% 10%, rgba(var(--color-gold-rgb), 0.34) 0%, rgba(var(--color-gold-rgb), 0) 30%),
+    radial-gradient(circle at 84% 24%, rgba(255, 247, 219, 0.7) 0%, rgba(255, 247, 219, 0) 28%),
+    radial-gradient(circle at 92% 88%, rgba(var(--color-accent-deep-rgb), 0.2) 0%, rgba(var(--color-accent-deep-rgb), 0) 34%),
+    linear-gradient(145deg, #fffaf4 0%, #ffe4e5 38%, #f5bdc6 72%, #eec7c0 100%);
+  --page-background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
 }
 
 @supports (-webkit-touch-callout: none) {
