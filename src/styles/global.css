@@ -4,8 +4,8 @@
   --color-accent-deep: #72061f;
   --color-accent-rgb: 179, 18, 52;
   --color-accent-deep-rgb: 114, 6, 31;
-  --color-gold: #d5a84f;
-  --color-gold-rgb: 213, 168, 79;
+  --color-gold: #d0b16d;
+  --color-gold-rgb: 208, 177, 109;
   --color-dot: #a50f2f;
   --color-dot-soft: rgba(179, 18, 52, 0.24);
   --color-line: rgba(114, 6, 31, 0.48);
@@ -48,12 +48,12 @@
   --ios-full-height: 100svh;
   --app-min-height: 100svh;
   --app-background-height: 100lvh;
-  --page-background-color: #ffe4e5;
+  --page-background-color: #ffe3eb;
   --page-background-image:
-    radial-gradient(ellipse at 0% 0%, rgba(var(--color-gold-rgb), 0.38) 0%, rgba(var(--color-gold-rgb), 0.22) 16%, rgba(var(--color-gold-rgb), 0) 42%),
-    radial-gradient(circle at 92% 88%, rgba(var(--color-accent-deep-rgb), 0.2) 0%, rgba(var(--color-accent-deep-rgb), 0) 34%),
-    linear-gradient(145deg, #ffe7e7 0%, #ffe4e5 38%, #f5bdc6 72%, #eec7c0 100%);
-  --page-background-position: left top, center, center;
+    radial-gradient(ellipse at 18% 22%, rgba(var(--color-gold-rgb), 0.18) 0%, rgba(var(--color-gold-rgb), 0.07) 32%, rgba(var(--color-gold-rgb), 0) 58%),
+    radial-gradient(ellipse at 82% 74%, rgba(var(--color-accent-rgb), 0.13) 0%, rgba(var(--color-accent-deep-rgb), 0.035) 34%, rgba(var(--color-accent-deep-rgb), 0) 62%),
+    linear-gradient(135deg, #ffe7ee 0%, #ffdce7 54%, #fde5c9 100%);
+  --page-background-position: center, center, center;
   --page-background-size: cover;
 }
 
