@@ -8,13 +8,13 @@ UID:wedding-alexey-anastasia-20260717@weddingsite
 DTSTAMP:20260429T000000Z
 DTSTART:20260717T083000Z
 DTEND:20260717T190000Z
-SUMMARY:Svadba Alekseya i Anastasii
-DESCRIPTION:Svadebnyy den Alekseya i Anastasii.\nRegistratsiya: 11:30.\nVenchanie: 14:00.\nBanket: 17:30.
-LOCATION:Astrakhan
+SUMMARY;LANGUAGE=ru:Свадьба Алексея и Анастасии
+DESCRIPTION;LANGUAGE=ru:Свадебный день Алексея и Анастасии.\nРегистрация: 11:30.\nВенчание: 14:00.\nБанкет: 17:30.
+LOCATION;LANGUAGE=ru:Астрахань
 BEGIN:VALARM
 TRIGGER:-P1D
 ACTION:DISPLAY
-DESCRIPTION:Zavtra svadba Alekseya i Anastasii
+DESCRIPTION;LANGUAGE=ru:Завтра свадьба Алексея и Анастасии
 END:VALARM
 END:VEVENT
 END:VCALENDAR
