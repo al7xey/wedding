@@ -6,13 +6,14 @@ const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
 const ROAD_PROGRESS_START = 0.16
 const ROAD_PROGRESS_END = 1.2
 const ROAD_SMOOTHING_FACTOR = 0.12
-const VENUE_MAP_LINK = 'https://yandex.ru/maps/-/CPf4aPmn'
+const VENUE_MAP_LINK = 'https://yandex.com/maps/org/natsional/122517401612/'
 const REGISTRY_OFFICE_MAP_LINK =
-  'https://yandex.ru/maps/?text=%D0%97%D0%90%D0%93%D0%A1%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D0%B8%2C%20%D1%83%D0%BB.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%201%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
+  'https://yandex.com/maps/org/otdel_1_sluzhby_zapisi_aktov_grazhdanskogo_sostoyaniya_astrakhanskoy_oblasti/1018948051/'
 const REGISTRY_OFFICE_IMAGE_SRC = '/images/registry-palace.webp'
 const REGISTRY_OFFICE_IMAGE_SRC_SET =
   '/images/registry-palace-480.webp 480w, /images/registry-palace-768.webp 768w, /images/registry-palace-1024.webp 1024w'
-const CHAPEL_MAP_LINK = 'https://yandex.ru/maps/?text=%D0%A5%D1%80%D0%B0%D0%BC%20%D0%9F%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%BD%D1%8F%2C%20%D0%90%D1%80%D0%B8%D1%81%D1%82%D0%BE%D0%B2%D0%B0%2036%2C%20%D0%90%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B0%D0%BD%D1%8C'
+const CHAPEL_MAP_LINK =
+  'https://yandex.com/maps/org/church_of_the_transfiguration_of_the_lord_on_trusovo/1391683689/'
 const CHAPEL_IMAGE_SRC = '/images/chapel.webp'
 const CHAPEL_IMAGE_SRC_SET =
   '/images/chapel-480.webp 480w, /images/chapel-768.webp 768w, /images/chapel-1024.webp 1024w'
@@ -112,6 +113,7 @@ const STORY_PATH_SMOOTHNESS = 1
 const CALENDAR_WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as const
 const WEDDING_DAY_OF_MONTH = 17
 const WEDDING_WEEK_CALENDAR_DAYS = [13, 14, 15, 16, 17, 18, 19] as const
+const IOS_CALENDAR_INVITE_LINK = '/calendar/wedding-invite.ics'
 const GOOGLE_CALENDAR_EVENT_PARAMS = new URLSearchParams({
   action: 'TEMPLATE',
   text: 'Свадьба Алексея и Анастасии',
@@ -172,8 +174,25 @@ const prefersReducedMotion = () =>
 const isIOSDevice = () =>
   /iP(hone|ad|od)/.test(window.navigator.userAgent) ||
   (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1)
+const isAppleDevice = () => {
+  const userAgent = window.navigator.userAgent
+  const platform = window.navigator.platform
+
+  return (
+    isIOSDevice() ||
+    /iP(hone|ad|od)/.test(userAgent) ||
+    /Macintosh|Mac OS X/.test(userAgent) ||
+    platform.startsWith('Mac')
+  )
+}
+
+const getCalendarActionLink = () =>
+  isAppleDevice() ? IOS_CALENDAR_INVITE_LINK : GOOGLE_CALENDAR_LINK
 
 const WeddingCalendarCard = () => {
+  const calendarActionLink = getCalendarActionLink()
+  const opensInNewTab = calendarActionLink === GOOGLE_CALENDAR_LINK
+
   return (
     <article
       className="wedding-calendar reveal-on-scroll"
@@ -222,9 +241,9 @@ const WeddingCalendarCard = () => {
         <p className="wedding-calendar__note">Пятница, 17 июля 2026</p>
         <a
           className="wedding-calendar__action"
-          href={GOOGLE_CALENDAR_LINK}
-          target="_blank"
-          rel="noreferrer"
+          href={calendarActionLink}
+          target={opensInNewTab ? '_blank' : undefined}
+          rel={opensInNewTab ? 'noreferrer' : undefined}
         >
           Записать в календарь
         </a>
