@@ -389,6 +389,7 @@ body::before {
 }
 
 .dress-note {
+  --card-hover-scale: 1;
   position: relative;
   min-width: 0;
   padding: clamp(1rem, 2.2vw, 1.3rem) clamp(1rem, 2.2vw, 1.3rem)
@@ -396,7 +397,7 @@ body::before {
   border-radius: var(--radius-lg);
   background: var(--glass-bg);
   box-shadow: var(--shadow-sm);
-  scale: 1;
+  scale: var(--card-hover-scale);
   transition:
     transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
     box-shadow 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -446,15 +447,15 @@ body::before {
 
 @media (hover: hover) and (pointer: fine) {
   .dress-note:hover {
+    --card-hover-scale: 1.045;
     z-index: 4;
-    scale: 1.024;
     box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
   }
 }
 
 .dress-note:focus-within {
+  --card-hover-scale: 1.045;
   z-index: 4;
-  scale: 1.024;
   box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
 }
 
@@ -981,6 +982,7 @@ body::before {
 }
 
 .timeline-item {
+  --card-hover-scale: 1;
   position: relative;
   z-index: 1;
   display: grid;
@@ -991,7 +993,7 @@ body::before {
   padding: 1.25rem var(--timeline-pad-x);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  scale: 1;
+  scale: var(--card-hover-scale);
   transition:
     opacity 0.65s ease,
     transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -1001,15 +1003,15 @@ body::before {
 
 @media (hover: hover) and (pointer: fine) {
   .timeline-item:hover {
+    --card-hover-scale: 1.045;
     z-index: 4;
-    scale: 1.024;
     box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
   }
 }
 
 .timeline-item:focus-within {
+  --card-hover-scale: 1.045;
   z-index: 4;
-  scale: 1.024;
   box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
 }
 
@@ -1183,6 +1185,7 @@ body::before {
   .dress-note {
     padding: 0.88rem 0.88rem 0.94rem;
     border-radius: 28px;
+    box-shadow: 0 10px 24px rgba(var(--color-accent-deep-rgb), 0.1);
   }
 
   .dress-note + .dress-note {
@@ -1340,6 +1343,7 @@ body::before {
 
   .story-section,
   .wedding-date-section,
+  .dress-code-section,
   .registry-section,
   .venue-section,
   .timeline-section,
@@ -1388,6 +1392,20 @@ body::before {
     margin-top: 0.36rem;
     font-size: var(--event-card-mobile-description-size);
     line-height: var(--event-card-mobile-description-line-height);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .timeline-item,
+  .dress-note {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .timeline-item:active,
+  .dress-note:active {
+    --card-hover-scale: 1.045;
+    z-index: 4;
+    box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
   }
 }
 
