@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 
+
 const COUNTDOWN_STEP_MS = 1000
 const WEDDING_DATE_TIMESTAMP = new Date('2026-07-17T00:00:00+03:00').getTime()
 const ROAD_PROGRESS_START = 0.16
@@ -951,6 +952,44 @@ const App = () => {
             </div>
           </section>
         )}
+
+        <section className="inv-section dress-code-section">
+          <div className="container">
+            <header className="section-head">
+              <h2 className="section-title">Дресс-код</h2>
+            </header>
+
+            <article
+              className="dress-code-card reveal-on-scroll"
+              data-reveal
+              data-reveal-delay="90"
+            >
+              <div className="dress-code-grid">
+                <section className="dress-note dress-note--women" aria-labelledby="dress-code-women">
+                  <h3 id="dress-code-women" className="dress-note__title">
+                    Любой оттенок, кроме белого
+                  </h3>
+                  <p className="dress-note__text">
+                    <span className="dress-note__lead-word">Девушек</span> просим
+                    выбрать любой оттенок, кроме белого, чтобы
+                    этот цвет в день свадьбы остался особенным для невесты.
+                  </p>
+                </section>
+
+                <section className="dress-note dress-note--men" aria-labelledby="dress-code-men">
+                  <h3 id="dress-code-men" className="dress-note__title">
+                    Классический образ
+                  </h3>
+                  <p className="dress-note__text">
+                    <span className="dress-note__lead-word">Мужчинам</span> будет
+                    предпочтительно в костюмах, пиджаках или
+                    рубашках.
+                  </p>
+                </section>
+              </div>
+            </article>
+          </div>
+        </section>
 
         {isCountdownVisible ? (
           <section className="inv-section countdown-section">

@@ -32,6 +32,15 @@
   --timeline-pad-x: clamp(1rem, 2.5vw, 1.8rem);
   --timeline-line-top: 0.45rem;
   --timeline-line-bottom: 0.45rem;
+  --event-card-title-size: clamp(1.34rem, 2.3vw, 1.8rem);
+  --event-card-title-line-height: 1.32;
+  --event-card-title-weight: 600;
+  --event-card-description-size: clamp(1rem, 1.6vw, 1.22rem);
+  --event-card-description-line-height: 1.62;
+  --event-card-mobile-title-size: clamp(1.16rem, 5vw, 1.42rem);
+  --event-card-mobile-title-line-height: 1.35;
+  --event-card-mobile-description-size: clamp(0.9rem, 4vw, 1rem);
+  --event-card-mobile-description-line-height: 1.5;
   --timeline-line-left: calc(
     var(--timeline-pad-x) + var(--timeline-time-col) + var(--timeline-gap) + (var(--timeline-dot-col) / 2)
   );
@@ -174,6 +183,7 @@ body::before {
 .wedding-calendar,
 .countdown-card,
 .countdown-item,
+.dress-note,
 .story-photo,
 .story-photo__content,
 .timeline-item {
@@ -349,6 +359,103 @@ body::before {
 
 .lead-text + .lead-text {
   margin-top: 0.8rem;
+}
+
+.dress-code-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 420px;
+}
+
+.dress-code-section .section-title {
+  font-weight: 600;
+}
+
+.dress-code-card,
+.dress-note {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.dress-code-card {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dress-code-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.72rem, 1.7vw, 1rem);
+}
+
+.dress-note {
+  position: relative;
+  min-width: 0;
+  padding: clamp(1rem, 2.2vw, 1.3rem) clamp(1rem, 2.2vw, 1.3rem)
+    clamp(1.08rem, 2.3vw, 1.4rem);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-sm);
+  scale: 1;
+  transition:
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+    scale 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.dress-note + .dress-note {
+  border-left: 0;
+}
+
+.dress-note--men {
+  display: grid;
+  align-content: start;
+}
+
+.dress-note__title,
+.dress-note__text {
+  position: relative;
+}
+
+.dress-note__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--event-card-title-size);
+  font-weight: var(--event-card-title-weight);
+  font-synthesis: weight;
+  line-height: var(--event-card-title-line-height);
+  color: var(--color-accent);
+}
+
+.dress-note__text {
+  margin: 0.58rem 0 0;
+  max-width: 30rem;
+  font-family: var(--font-body);
+  font-size: var(--event-card-description-size);
+  line-height: var(--event-card-description-line-height);
+  color: var(--color-text);
+}
+
+.dress-note__lead-word {
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dress-note:hover {
+    z-index: 4;
+    scale: 1.024;
+    box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
+  }
+}
+
+.dress-note:focus-within {
+  z-index: 4;
+  scale: 1.024;
+  box-shadow: 0 24px 38px -24px rgba(var(--color-accent-deep-rgb), 0.46);
 }
 
 .wedding-date-section {
@@ -944,18 +1051,18 @@ body::before {
 .timeline-item__title {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(1.34rem, 2.3vw, 1.8rem);
-  font-weight: 600;
+  font-size: var(--event-card-title-size);
+  font-weight: var(--event-card-title-weight);
   font-synthesis: weight;
-  line-height: 1.32;
+  line-height: var(--event-card-title-line-height);
   color: var(--color-accent);
 }
 
 .timeline-item__description {
   margin: 0.58rem 0 0;
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.6vw, 1.22rem);
-  line-height: 1.62;
+  font-size: var(--event-card-description-size);
+  line-height: var(--event-card-description-line-height);
   color: var(--color-text);
 }
 
@@ -1024,6 +1131,7 @@ body::before {
   }
 
   .soft-card,
+  .dress-code-card,
   .wedding-calendar,
   .registry-card,
   .countdown-card,
@@ -1060,6 +1168,39 @@ body::before {
   .wedding-calendar {
     padding: 1.08rem 0.92rem 1rem;
     border-radius: 28px;
+  }
+
+  .dress-code-card {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .dress-code-grid {
+    grid-template-columns: 1fr;
+    gap: 0.78rem;
+  }
+
+  .dress-note {
+    padding: 0.88rem 0.88rem 0.94rem;
+    border-radius: 28px;
+  }
+
+  .dress-note + .dress-note {
+    padding-top: 0.88rem;
+    padding-bottom: 0.94rem;
+    border-top: 0;
+  }
+
+  .dress-note__title {
+    max-width: none;
+    font-size: var(--event-card-mobile-title-size);
+    line-height: var(--event-card-mobile-title-line-height);
+  }
+
+  .dress-note__text {
+    margin-top: 0.36rem;
+    font-size: var(--event-card-mobile-description-size);
+    line-height: var(--event-card-mobile-description-line-height);
   }
 
   .final-message {
@@ -1239,14 +1380,14 @@ body::before {
   }
 
   .timeline-item__title {
-    font-size: clamp(1.16rem, 5vw, 1.42rem);
-    line-height: 1.35;
+    font-size: var(--event-card-mobile-title-size);
+    line-height: var(--event-card-mobile-title-line-height);
   }
 
   .timeline-item__description {
     margin-top: 0.36rem;
-    font-size: clamp(0.9rem, 4vw, 1rem);
-    line-height: 1.5;
+    font-size: var(--event-card-mobile-description-size);
+    line-height: var(--event-card-mobile-description-line-height);
   }
 }
 
@@ -1275,6 +1416,7 @@ body::before {
   }
 
   .soft-card,
+  .dress-code-card,
   .wedding-calendar,
   .registry-card,
   .countdown-card,
